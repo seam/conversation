@@ -1,0 +1,3 @@
+This is where diferent CDI impls should abstract their conversation management logic
+until that is part of the CDI spec.
+
