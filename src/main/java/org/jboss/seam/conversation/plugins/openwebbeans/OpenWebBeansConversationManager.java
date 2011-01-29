@@ -20,42 +20,36 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.seam.conversation.plugins.weld;
+package org.jboss.seam.conversation.plugins.openwebbeans;
 
 import javax.enterprise.context.Conversation;
-import javax.enterprise.context.spi.Context;
-import javax.enterprise.inject.Instance;
 
 import org.jboss.seam.conversation.plugins.AbstractConversationManager;
-import org.jboss.weld.Container;
-import org.jboss.weld.context.http.HttpConversationContext;
+
+import org.apache.webbeans.context.ConversationContext;
+import org.apache.webbeans.conversation.ConversationImpl;
+import org.apache.webbeans.conversation.ConversationManager;
 
 /**
- * Weld based conversation manager.
+ * OpenWebBeans based conversation manager.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
- * @author Shane Bryzak
  */
-public class WeldConversationManager extends AbstractConversationManager
+public class OpenWebBeansConversationManager extends AbstractConversationManager
 {
-   private static Instance<Context> instance()
-   {
-      return Container.instance().deploymentManager().instance().select(Context.class);
-   }
-
    public Conversation restoreConversationContext(String conversationId)
    {
-      Instance<Context> instance = instance();
-      HttpConversationContext conversationContext = instance.select(HttpConversationContext.class).get();
-
-      if (conversationId != null && isEmpty(conversationId) == false)
+      ConversationManager manager = ConversationManager.getInstance();
+      if (manager.isConversationExistWithGivenId(conversationId))
       {
-         conversationContext.activate(conversationId);
+         return manager.getPropogatedConversation(conversationId, null);
       }
       else
       {
-         conversationContext.activate(null);
+         Conversation conversation = new ConversationImpl();
+         ConversationContext conversationContext = null; // TODO
+         manager.addConversationContext(conversation, conversationContext);
+         return conversation;
       }
-      return conversationContext.getConversation(conversationId);
    }
 }

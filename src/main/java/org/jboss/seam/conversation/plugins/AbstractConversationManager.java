@@ -20,42 +20,38 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.seam.conversation.plugins.weld;
+package org.jboss.seam.conversation.plugins;
 
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.inject.Instance;
 
-import org.jboss.seam.conversation.plugins.AbstractConversationManager;
+import org.jboss.seam.conversation.spi.ConversationManager;
 import org.jboss.weld.Container;
 import org.jboss.weld.context.http.HttpConversationContext;
 
 /**
- * Weld based conversation manager.
+ * Abstract conversation manager.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
- * @author Shane Bryzak
  */
-public class WeldConversationManager extends AbstractConversationManager
+public abstract class AbstractConversationManager implements ConversationManager
 {
-   private static Instance<Context> instance()
+   protected static boolean isEmpty(String string)
    {
-      return Container.instance().deploymentManager().instance().select(Context.class);
-   }
-
-   public Conversation restoreConversationContext(String conversationId)
-   {
-      Instance<Context> instance = instance();
-      HttpConversationContext conversationContext = instance.select(HttpConversationContext.class).get();
-
-      if (conversationId != null && isEmpty(conversationId) == false)
+      int len;
+      if (string == null || (len = string.length()) == 0)
       {
-         conversationContext.activate(conversationId);
+         return true;
       }
-      else
+
+      for (int i = 0; i < len; i++)
       {
-         conversationContext.activate(null);
+         if ((Character.isWhitespace(string.charAt(i)) == false))
+         {
+            return false;
+         }
       }
-      return conversationContext.getConversation(conversationId);
+      return true;
    }
 }

@@ -20,42 +20,21 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.seam.conversation.plugins.weld;
+package org.jboss.seam.conversation.plugins.candi;
 
 import javax.enterprise.context.Conversation;
-import javax.enterprise.context.spi.Context;
-import javax.enterprise.inject.Instance;
 
 import org.jboss.seam.conversation.plugins.AbstractConversationManager;
-import org.jboss.weld.Container;
-import org.jboss.weld.context.http.HttpConversationContext;
 
 /**
- * Weld based conversation manager.
+ * CanDI based conversation manager.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
- * @author Shane Bryzak
  */
-public class WeldConversationManager extends AbstractConversationManager
+public class CandiConversationManager extends AbstractConversationManager
 {
-   private static Instance<Context> instance()
-   {
-      return Container.instance().deploymentManager().instance().select(Context.class);
-   }
-
    public Conversation restoreConversationContext(String conversationId)
    {
-      Instance<Context> instance = instance();
-      HttpConversationContext conversationContext = instance.select(HttpConversationContext.class).get();
-
-      if (conversationId != null && isEmpty(conversationId) == false)
-      {
-         conversationContext.activate(conversationId);
-      }
-      else
-      {
-         conversationContext.activate(null);
-      }
-      return conversationContext.getConversation(conversationId);
+      return null;  // TODO
    }
 }
