@@ -22,20 +22,40 @@
 
 package org.jboss.seam.conversation.spi;
 
-import javax.enterprise.context.Conversation;
-
 /**
- * Handle Conversation context.
+ * Create SeamConversationContext based on underlying CDI implementation.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public interface ConversationManager
+public class SeamConversationContextFactory
 {
+   private static SeamConversationContext context;
+
    /**
-    * Restore Conversation based on id.
+    * Get the current Seam converation context instance.
     *
-    * @param conversationId the conversation id
-    * @return restored conversation or null if no match
+    * @return get current conversation context instance
     */
-   Conversation restoreConversationContext(String conversationId);
+   public static SeamConversationContext getContext()
+   {
+      if (context == null)
+      {
+         synchronized (SeamConversationContextFactory.class)
+         {
+            if (context == null)
+               context = create();
+         }
+      }
+      return context;
+   }
+
+   /**
+    * Create new SeamConversationContext instance, based on underlying CDI impl.
+    *
+    * @return new Seam conversaton context
+    */
+   private static SeamConversationContext create()
+   {
+      return null;
+   }
 }

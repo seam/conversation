@@ -20,42 +20,43 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.seam.conversation.spi;
+package org.jboss.seam.conversation.plugins.openwebbeans;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.jboss.seam.conversation.plugins.AbstractSeamConversationContext;
+
+import org.apache.webbeans.conversation.ConversationManager;
 
 /**
- * Create ConversationManager based on underlying CDI implementation.
+ * OpenWebBeans based Seam conversation context.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class ConversationManagerFactory
+public class OpenWebBeansSeamConversationContext extends AbstractSeamConversationContext
 {
-   private static ConversationManager manager;
-
-   /**
-    * Get the current Converation manager instance.
-    *
-    * @return get current manager instance
-    */
-   public static ConversationManager getManager()
+   protected void doAssociate(HttpServletRequest request)
    {
-      if (manager == null)
-      {
-         synchronized (ConversationManagerFactory.class)
-         {
-            if (manager == null)
-               manager = create();
-         }
-      }
-      return manager;
+      ConversationManager manager = ConversationManager.getInstance();
    }
 
-   /**
-    * Create new manager instance, based on underlying CDI impl.
-    *
-    * @return new conversaton manager
-    */
-   private static ConversationManager create()
+   protected void doActivate(String conversationId)
    {
-      return null;
+      //To change body of implemented methods use File | Settings | File Templates.
+   }
+
+   protected void doInvalidate()
+   {
+      //To change body of implemented methods use File | Settings | File Templates.
+   }
+
+   protected void doDeactivate()
+   {
+      //To change body of implemented methods use File | Settings | File Templates.
+   }
+
+   protected void doDissociate(HttpServletRequest request)
+   {
+      //To change body of implemented methods use File | Settings | File Templates.
    }
 }

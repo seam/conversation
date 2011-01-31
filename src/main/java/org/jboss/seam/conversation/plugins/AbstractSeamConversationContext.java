@@ -22,21 +22,58 @@
 
 package org.jboss.seam.conversation.plugins;
 
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.spi.Context;
-import javax.enterprise.inject.Instance;
 
-import org.jboss.seam.conversation.spi.ConversationManager;
-import org.jboss.weld.Container;
-import org.jboss.weld.context.http.HttpConversationContext;
+import javax.servlet.http.HttpServletRequest;
+
+import org.jboss.seam.conversation.spi.SeamConversationContext;
 
 /**
- * Abstract conversation manager.
+ * Abstract Seam conversation context.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public abstract class AbstractConversationManager implements ConversationManager
+public abstract class AbstractSeamConversationContext implements SeamConversationContext
 {
+   protected abstract void doAssociate(HttpServletRequest request);
+
+   public SeamConversationContext associate(HttpServletRequest request)
+   {
+      doAssociate(request);
+      return this;
+   }
+
+   protected abstract void doActivate(String conversationId);
+
+   public SeamConversationContext activate(String conversationId)
+   {
+      doActivate(conversationId);
+      return this;
+   }
+
+   protected abstract void doInvalidate();
+
+   public SeamConversationContext invalidate()
+   {
+      doInvalidate();
+      return this;
+   }
+
+   protected abstract void doDeactivate();
+
+   public SeamConversationContext deactivate()
+   {
+      doDeactivate();
+      return this;
+   }
+
+   protected abstract void doDissociate(HttpServletRequest request);
+
+   public SeamConversationContext dissociate(HttpServletRequest request)
+   {
+      doDissociate(request);
+      return this;
+   }
+
    protected static boolean isEmpty(String string)
    {
       int len;

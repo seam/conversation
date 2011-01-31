@@ -22,11 +22,9 @@
 
 package org.jboss.seam.conversation.plugins.weld;
 
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.spi.Context;
-import javax.enterprise.inject.Instance;
+import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.seam.conversation.plugins.AbstractConversationManager;
+import org.jboss.seam.conversation.plugins.AbstractSeamConversationContext;
 import org.jboss.weld.Container;
 import org.jboss.weld.context.http.HttpConversationContext;
 
@@ -34,20 +32,24 @@ import org.jboss.weld.context.http.HttpConversationContext;
  * Weld based conversation manager.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
+ * @author Pete Muir
  * @author Shane Bryzak
  */
-public class WeldConversationManager extends AbstractConversationManager
+public class WeldSeamConversationContext extends AbstractSeamConversationContext
 {
-   private static Instance<Context> instance()
+   protected HttpConversationContext getHttpConversationContext()
    {
-      return Container.instance().deploymentManager().instance().select(Context.class);
+      return Container.instance().deploymentManager().instance().select(HttpConversationContext.class).get();
    }
 
-   public Conversation restoreConversationContext(String conversationId)
+   protected void doAssociate(HttpServletRequest request)
    {
-      Instance<Context> instance = instance();
-      HttpConversationContext conversationContext = instance.select(HttpConversationContext.class).get();
+      getHttpConversationContext().associate(request);
+   }
 
+   protected void doActivate(String conversationId)
+   {
+      HttpConversationContext conversationContext = getHttpConversationContext();
       if (conversationId != null && isEmpty(conversationId) == false)
       {
          conversationContext.activate(conversationId);
@@ -56,6 +58,20 @@ public class WeldConversationManager extends AbstractConversationManager
       {
          conversationContext.activate(null);
       }
-      return conversationContext.getConversation(conversationId);
+   }
+
+   protected void doInvalidate()
+   {
+      getHttpConversationContext().invalidate();
+   }
+
+   protected void doDeactivate()
+   {
+      getHttpConversationContext().deactivate();
+   }
+
+   protected void doDissociate(HttpServletRequest request)
+   {
+      getHttpConversationContext().dissociate(request);
    }
 }

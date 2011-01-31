@@ -20,36 +20,41 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.seam.conversation.plugins.openwebbeans;
+package org.jboss.seam.conversation.plugins.candi;
 
-import javax.enterprise.context.Conversation;
+import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.seam.conversation.plugins.AbstractConversationManager;
-
-import org.apache.webbeans.context.ConversationContext;
-import org.apache.webbeans.conversation.ConversationImpl;
-import org.apache.webbeans.conversation.ConversationManager;
+import org.jboss.seam.conversation.plugins.AbstractSeamConversationContext;
 
 /**
- * OpenWebBeans based conversation manager.
+ * CanDI based Seam conversation context.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class OpenWebBeansConversationManager extends AbstractConversationManager
+public class CanDISeamConversationContext extends AbstractSeamConversationContext
 {
-   public Conversation restoreConversationContext(String conversationId)
+   protected void doAssociate(HttpServletRequest request)
    {
-      ConversationManager manager = ConversationManager.getInstance();
-      if (manager.isConversationExistWithGivenId(conversationId))
-      {
-         return manager.getPropogatedConversation(conversationId, null);
-      }
-      else
-      {
-         Conversation conversation = new ConversationImpl();
-         ConversationContext conversationContext = null; // TODO
-         manager.addConversationContext(conversation, conversationContext);
-         return conversation;
-      }
+      //To change body of implemented methods use File | Settings | File Templates.
+   }
+
+   protected void doActivate(String conversationId)
+   {
+      //To change body of implemented methods use File | Settings | File Templates.
+   }
+
+   protected void doInvalidate()
+   {
+      //To change body of implemented methods use File | Settings | File Templates.
+   }
+
+   protected void doDeactivate()
+   {
+      //To change body of implemented methods use File | Settings | File Templates.
+   }
+
+   protected void doDissociate(HttpServletRequest request)
+   {
+      //To change body of implemented methods use File | Settings | File Templates.
    }
 }
