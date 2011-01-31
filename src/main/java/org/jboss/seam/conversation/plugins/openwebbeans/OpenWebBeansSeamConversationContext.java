@@ -22,10 +22,15 @@
 
 package org.jboss.seam.conversation.plugins.openwebbeans;
 
+import javax.enterprise.context.Conversation;
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Map;
 
 import org.jboss.seam.conversation.plugins.AbstractSeamConversationContext;
 
+import org.apache.webbeans.context.ConversationContext;
+import org.apache.webbeans.conversation.ConversationImpl;
 import org.apache.webbeans.conversation.ConversationManager;
 
 /**
@@ -35,28 +40,47 @@ import org.apache.webbeans.conversation.ConversationManager;
  */
 public class OpenWebBeansSeamConversationContext extends AbstractSeamConversationContext
 {
+   private static ThreadLocal<String> sessionIds = new ThreadLocal<String>();
+
    protected void doAssociate(HttpServletRequest request)
    {
-      ConversationManager manager = ConversationManager.getInstance();
+      String sessionId = request.getSession(false).getId();
+      sessionIds.set(sessionId);
    }
 
    protected void doActivate(String conversationId)
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      ConversationManager manager = ConversationManager.getInstance();
+      if (manager.isConversationExistWithGivenId(conversationId) == false)
+      {
+         Conversation conversation = new ConversationImpl(sessionIds.get());
+         manager.addConversationContext(conversation, null);
+      }
    }
 
    protected void doInvalidate()
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      ConversationManager manager = ConversationManager.getInstance();
+      manager.destroyWithRespectToTimout();
    }
 
    protected void doDeactivate()
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      ConversationManager manager = ConversationManager.getInstance();
+      Map<Conversation, ConversationContext> map = manager.getConversationMapWithSessionId(sessionIds.get());
+      for (Map.Entry<Conversation, ConversationContext> entry : map.entrySet())
+      {
+         Conversation conversation = entry.getKey();
+         if (conversation.isTransient())
+            entry.getValue().destroy();
+         manager.removeConversation(conversation);
+      }
    }
 
    protected void doDissociate(HttpServletRequest request)
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      String sessionId = request.getSession(false).getId();
+      if (sessionId.equals(sessionIds.get()))
+         sessionIds.remove();
    }
 }
