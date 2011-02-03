@@ -22,22 +22,21 @@
 
 package org.jboss.seam.conversation.spi;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Manage Seam Conversation context.
  *
+ * @param <T> exact storage type
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public interface SeamConversationContext
+public interface SeamConversationContext<T>
 {
    /**
-    * Associate request with conversation context.
+    * Associate storage with conversation context.
     *
-    * @param request the current request
+    * @param storage the current storage
     * @return the flowing current SeamConversationContext instance
     */
-   SeamConversationContext associate(HttpServletRequest request);
+   SeamConversationContext associate(T storage);
 
    /**
     * Activate conversation with given id.
@@ -62,10 +61,10 @@ public interface SeamConversationContext
    SeamConversationContext deactivate();
 
    /**
-    * Dissociate request with conversation context.
+    * Dissociate storage with conversation context.
     *
-    * @param request the current request
+    * @param storage the current storage
     * @return the flowing current SeamConversationContext instance
     */
-   SeamConversationContext dissociate(HttpServletRequest request);
+   SeamConversationContext dissociate(T storage);
 }

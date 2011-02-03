@@ -23,51 +23,40 @@
 package org.jboss.seam.conversation.plugins.openwebbeans;
 
 import javax.enterprise.context.Conversation;
-import javax.servlet.http.HttpServletRequest;
 
 import java.util.Map;
-
-import org.jboss.seam.conversation.plugins.AbstractSeamConversationContext;
 
 import org.apache.webbeans.context.ConversationContext;
 import org.apache.webbeans.conversation.ConversationImpl;
 import org.apache.webbeans.conversation.ConversationManager;
 
 /**
- * OpenWebBeans based Seam conversation context.
+ * OpenWebBeans based Seam conversation manager.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class OpenWebBeansSeamConversationContext extends AbstractSeamConversationContext
+class OpenWebBeansSeamConversationManager
 {
-   private static ThreadLocal<String> sessionIds = new ThreadLocal<String>();
-
-   protected void doAssociate(HttpServletRequest request)
-   {
-      String sessionId = request.getSession(false).getId();
-      sessionIds.set(sessionId);
-   }
-
-   protected void doActivate(String conversationId)
+   static void doActivate(String conversationId, String sessionId)
    {
       ConversationManager manager = ConversationManager.getInstance();
       if (manager.isConversationExistWithGivenId(conversationId) == false)
       {
-         Conversation conversation = new ConversationImpl(sessionIds.get());
+         Conversation conversation = new ConversationImpl(sessionId);
          manager.addConversationContext(conversation, null);
       }
    }
 
-   protected void doInvalidate()
+   static void doInvalidate()
    {
       ConversationManager manager = ConversationManager.getInstance();
       manager.destroyWithRespectToTimout();
    }
 
-   protected void doDeactivate()
+   static void doDeactivate(String sessionId)
    {
       ConversationManager manager = ConversationManager.getInstance();
-      Map<Conversation, ConversationContext> map = manager.getConversationMapWithSessionId(sessionIds.get());
+      Map<Conversation, ConversationContext> map = manager.getConversationMapWithSessionId(sessionId);
       for (Map.Entry<Conversation, ConversationContext> entry : map.entrySet())
       {
          Conversation conversation = entry.getKey();
@@ -75,12 +64,5 @@ public class OpenWebBeansSeamConversationContext extends AbstractSeamConversatio
             entry.getValue().destroy();
          manager.removeConversation(conversation);
       }
-   }
-
-   protected void doDissociate(HttpServletRequest request)
-   {
-      String sessionId = request.getSession(false).getId();
-      if (sessionId.equals(sessionIds.get()))
-         sessionIds.remove();
    }
 }

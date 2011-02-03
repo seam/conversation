@@ -20,41 +20,46 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.seam.conversation.plugins.candi;
+package org.jboss.seam.conversation.plugins.openwebbeans;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.seam.conversation.plugins.AbstractSeamConversationContext;
+import org.jboss.seam.conversation.plugins.AbstractHttpSeamConversationContext;
 
 /**
- * CanDI based Seam conversation context.
+ * OpenWebBeans Http based Seam conversation context.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class CanDISeamConversationContext extends AbstractSeamConversationContext
+public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamConversationContext
 {
+   private static ThreadLocal<String> sessionIds = new ThreadLocal<String>();
+
    protected void doAssociate(HttpServletRequest request)
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      String sessionId = request.getSession(false).getId();
+      sessionIds.set(sessionId);
    }
 
    protected void doActivate(String conversationId)
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      OpenWebBeansSeamConversationManager.doActivate(conversationId, sessionIds.get());
    }
 
    protected void doInvalidate()
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      OpenWebBeansSeamConversationManager.doInvalidate();
    }
 
    protected void doDeactivate()
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      OpenWebBeansSeamConversationManager.doDeactivate(sessionIds.get());
    }
 
    protected void doDissociate(HttpServletRequest request)
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      String sessionId = request.getSession(false).getId();
+      if (sessionId.equals(sessionIds.get()))
+         sessionIds.remove();
    }
 }

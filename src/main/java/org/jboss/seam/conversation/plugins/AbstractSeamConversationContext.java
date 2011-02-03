@@ -23,8 +23,6 @@
 package org.jboss.seam.conversation.plugins;
 
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.jboss.seam.conversation.spi.SeamConversationContext;
 
 /**
@@ -32,16 +30,23 @@ import org.jboss.seam.conversation.spi.SeamConversationContext;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public abstract class AbstractSeamConversationContext implements SeamConversationContext
+public abstract class AbstractSeamConversationContext<T> implements SeamConversationContext<T>
 {
-   protected abstract void doAssociate(HttpServletRequest request);
+   protected abstract void doAssociate(T storage);
 
-   public SeamConversationContext associate(HttpServletRequest request)
+   public SeamConversationContext associate(T storage)
    {
-      doAssociate(request);
+      doAssociate(storage);
       return this;
    }
 
+   protected abstract void doDissociate(T storage);
+
+   public SeamConversationContext dissociate(T storage)
+   {
+      doDissociate(storage);
+      return this;
+   }
    protected abstract void doActivate(String conversationId);
 
    public SeamConversationContext activate(String conversationId)
@@ -63,14 +68,6 @@ public abstract class AbstractSeamConversationContext implements SeamConversatio
    public SeamConversationContext deactivate()
    {
       doDeactivate();
-      return this;
-   }
-
-   protected abstract void doDissociate(HttpServletRequest request);
-
-   public SeamConversationContext dissociate(HttpServletRequest request)
-   {
-      doDissociate(request);
       return this;
    }
 

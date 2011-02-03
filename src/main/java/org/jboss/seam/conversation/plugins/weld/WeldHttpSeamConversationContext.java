@@ -24,18 +24,18 @@ package org.jboss.seam.conversation.plugins.weld;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.seam.conversation.plugins.AbstractSeamConversationContext;
+import org.jboss.seam.conversation.plugins.AbstractHttpSeamConversationContext;
 import org.jboss.weld.Container;
 import org.jboss.weld.context.http.HttpConversationContext;
 
 /**
- * Weld based conversation manager.
+ * Weld Http based conversation manager.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  * @author Pete Muir
  * @author Shane Bryzak
  */
-public class WeldSeamConversationContext extends AbstractSeamConversationContext
+public class WeldHttpSeamConversationContext extends AbstractHttpSeamConversationContext
 {
    protected HttpConversationContext getHttpConversationContext()
    {
