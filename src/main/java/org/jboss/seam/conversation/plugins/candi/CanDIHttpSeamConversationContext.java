@@ -22,39 +22,70 @@
 
 package org.jboss.seam.conversation.plugins.candi;
 
+import javax.enterprise.context.ConversationScoped;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.conversation.plugins.AbstractHttpSeamConversationContext;
 
+import com.caucho.config.inject.InjectManager;
+import com.caucho.server.webbeans.ConversationContext;
+
 /**
  * CanDI Http based Seam conversation context.
+ *
+ * Note: depends on JSF
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversationContext
 {
+   private ConversationContext context;
+   private static ThreadLocal<HttpServletRequest> requests = new ThreadLocal<HttpServletRequest>();
+
+   public CanDIHttpSeamConversationContext()
+   {
+      InjectManager manager = InjectManager.create();
+      context = (ConversationContext) manager.getContext(ConversationScoped.class);
+   }
+
    protected void doAssociate(HttpServletRequest request)
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      requests.set(request);
+      // real associate work is done in ConversationContext::createJsfScope
    }
 
    protected void doActivate(String conversationId)
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      HttpServletRequest request = requests.get();
+      if (request == null)
+         throw new IllegalArgumentException("Forgot to associate request with conversation context?");
+
+      request.setAttribute("caucho.cid", conversationId);
    }
 
    protected void doInvalidate()
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      // TODO -- any way to invalidate conversations?
    }
 
    protected void doDeactivate()
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      HttpServletRequest request = requests.get();
+      if (request == null)
+         throw new IllegalArgumentException("Forgot to associate request with conversation context?");
+
+      request.removeAttribute("caucho.cid");
    }
 
    protected void doDissociate(HttpServletRequest request)
    {
-      //To change body of implemented methods use File | Settings | File Templates.
+      try
+      {
+         context.destroy();
+      }
+      finally
+      {
+         requests.remove();
+      }
    }
 }

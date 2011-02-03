@@ -23,7 +23,21 @@
       <weld.api.version>1.1.Beta2</weld.api.version>
       <weld.core.version>1.1.0.Final</weld.core.version>
       <openwebbeans.impl.version>1.0.0</openwebbeans.impl.version>
+      <candi.impl.version>4.0.14</candi.impl.version>
    </properties>
+
+   <repositories>
+      <repository>
+         <id>caucho</id>
+         <name>Caucho Maven Repository</name>
+         <url>http://caucho.com/m2/</url>
+         <layout>default</layout>
+         <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+         </releases>
+      </repository>
+   </repositories>
 
    <dependencies>
       <dependency>
@@ -47,6 +61,17 @@
          <groupId>org.apache.openwebbeans</groupId>
          <artifactId>openwebbeans-impl</artifactId>
          <version>${openwebbeans.impl.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>com.caucho</groupId>
+         <artifactId>resin</artifactId>
+         <version>${candi.impl.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>com.caucho</groupId>
+         <artifactId>resin-javaee</artifactId>
+         <version>${candi.impl.version}</version>
       </dependency>
    </dependencies>
 
