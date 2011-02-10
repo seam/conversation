@@ -42,7 +42,7 @@ public class SmokeTest
    @Deployment
    public static WebArchive deployment()
    {
-      return Deployments.baseDeployment();
+      return JettyDeployments.jettyfy(Deployments.baseDeployment());
    }
 
    @Test
