@@ -22,6 +22,8 @@
 
 package org.jboss.seam.conversation.test;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.spi.SeamConversationContext;
@@ -48,6 +50,7 @@ public class SmokeTest
    @Test
    public void testFactory() throws Exception
    {
-      SeamConversationContext scc = SeamConversationContextFactory.getContext(null);
+      SeamConversationContext<HttpServletRequest> scc = SeamConversationContextFactory.getContext(HttpServletRequest.class);
+      System.err.println("SeamCC = " + scc);
    }
 }

@@ -22,6 +22,11 @@
 
 package org.jboss.seam.conversation.spi;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.jboss.seam.conversation.plugins.candi.CanDIHttpSeamConversationContext;
+import org.jboss.seam.conversation.plugins.openwebbeans.OpenWebBeansHttpSeamConversationContext;
+import org.jboss.seam.conversation.plugins.weld.WeldBoundSeamConversationContext;
 import org.jboss.seam.conversation.plugins.weld.WeldHttpSeamConversationContext;
 
 /**
@@ -31,6 +36,10 @@ import org.jboss.seam.conversation.plugins.weld.WeldHttpSeamConversationContext;
  */
 public class SeamConversationContextFactory
 {
+   private static String WELD_ENV = "org.jboss.weld.manager.api.WeldManager";
+   private static String OWB_ENV = "org.apache.webbeans.container.BeanManagerImpl";
+   private static String CANDI_ENV = "com.caucho.config.inject.InjectManager";
+
    private static SeamConversationContext context;
 
    /**
@@ -55,12 +64,55 @@ public class SeamConversationContextFactory
 
    /**
     * Create new SeamConversationContext instance, based on underlying CDI impl.
+    * If null is passed as store type, we use CDI impl's default HTTP based SeamConversationContext.
     *
     * @param storeType the store type
     * @return new Seam conversaton context
     */
    private static <T> SeamConversationContext<T> create(Class<T> storeType)
    {
-      return (SeamConversationContext<T>) new WeldHttpSeamConversationContext(); // TODO
+      boolean isNullOrHttp = HttpServletRequest.class.isAssignableFrom(storeType);
+
+      if (testEnv(WELD_ENV))
+      {
+         if (isNullOrHttp)
+            return (SeamConversationContext<T>) new WeldHttpSeamConversationContext();
+         else if ("org.jboss.weld.context.bound.BoundRequest".equals(storeType.getName()))
+            return (SeamConversationContext<T>) new WeldBoundSeamConversationContext();
+      }
+
+      if (isNullOrHttp == false)
+         throw new IllegalArgumentException("Only http Seam context is available for non JBoss Weld impls.");
+
+      if (testEnv(OWB_ENV))
+      {
+         return (SeamConversationContext<T>) new OpenWebBeansHttpSeamConversationContext();
+      }
+      else if (testEnv(CANDI_ENV))
+      {
+         return (SeamConversationContext<T>) new CanDIHttpSeamConversationContext();
+      }
+      else
+         throw new IllegalArgumentException("No matching CDI environment available: " + storeType);
+   }
+
+   /**
+    * Test if env class exists.
+    *
+    * @param env the env class
+    * @return true if env exists, false otherwise
+    */
+   private static boolean testEnv(String env)
+   {
+      try
+      {
+         ClassLoader cl = SeamConversationContextFactory.class.getClassLoader();
+         cl.loadClass(env);
+         return true;
+      }
+      catch (Exception e)
+      {
+         return false;
+      }
    }
 }
