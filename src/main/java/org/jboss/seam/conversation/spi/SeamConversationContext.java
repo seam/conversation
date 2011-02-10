@@ -36,7 +36,7 @@ public interface SeamConversationContext<T>
     * @param storage the current storage
     * @return the flowing current SeamConversationContext instance
     */
-   SeamConversationContext associate(T storage);
+   SeamConversationContext<T> associate(T storage);
 
    /**
     * Activate conversation with given id.
@@ -44,21 +44,21 @@ public interface SeamConversationContext<T>
     * @param conversationId the conversation id to activate
     * @return the flowing current SeamConversationContext instance
     */
-   SeamConversationContext activate(String conversationId);
+   SeamConversationContext<T> activate(String conversationId);
 
    /**
     * Invalidate conversation context.
     *
     * @return the flowing current SeamConversationContext instance
     */
-   SeamConversationContext invalidate();
+   SeamConversationContext<T> invalidate();
 
    /**
     * Deactivate conversation context(s).
     *
     * @return the flowing current SeamConversationContext instance
     */
-   SeamConversationContext deactivate();
+   SeamConversationContext<T> deactivate();
 
    /**
     * Dissociate storage with conversation context.
@@ -66,5 +66,5 @@ public interface SeamConversationContext<T>
     * @param storage the current storage
     * @return the flowing current SeamConversationContext instance
     */
-   SeamConversationContext dissociate(T storage);
+   SeamConversationContext<T> dissociate(T storage);
 }

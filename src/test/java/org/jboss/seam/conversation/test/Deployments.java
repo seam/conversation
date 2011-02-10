@@ -34,7 +34,7 @@ import org.jboss.weld.environment.servlet.test.util.BeansXml;
  */
 public class Deployments
 {
-   public static final String CONTEXT_PATH = "http://localhost:8888/test";
+   public static final String CONTEXT_PATH = "http://localhost:9090/test";
 
    public static final String DEFAULT_WEB_XML_PREFIX = "<web-app> <listener><listener-class>org.jboss.weld.environment.servlet.Listener</listener-class></listener> <resource-env-ref><resource-env-ref-name>BeanManager</resource-env-ref-name><resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type></resource-env-ref> ";
    public static final String DEFAULT_WEB_XML_SUFFIX = "</web-app>";

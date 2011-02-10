@@ -22,12 +22,14 @@
 
 package org.jboss.seam.conversation.test;
 
-import javax.servlet.http.HttpServletRequest;
+import java.net.URL;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.seam.conversation.spi.SeamConversationContext;
-import org.jboss.seam.conversation.spi.SeamConversationContextFactory;
+import org.jboss.seam.conversation.support.RealTestFilter;
+import org.jboss.seam.conversation.support.SetupHttpSCCFilter;
+import org.jboss.shrinkwrap.api.asset.Asset;
+import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 import org.junit.Test;
@@ -41,16 +43,36 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class SmokeTest
 {
+   static String FILTER = 
+         "<filter>" +
+         "<filter-name>conversation</filter-name>" +
+         "<filter-class>" + SetupHttpSCCFilter.class.getName() + "</filter-class>" +
+         "</filter>" +
+         "<filter>" +
+         "<filter-name>test-filter</filter-name>" +
+         "<filter-class>" + RealTestFilter.class.getName() + "</filter-class>" +
+         "</filter>" +
+         "<filter-mapping>" +
+         "<filter-name>conversation</filter-name>" +
+         "<url-pattern>/*</url-pattern>" +
+         "</filter-mapping>" +
+         "<filter-mapping>" +
+         "<filter-name>test-filter</filter-name>" +
+         "<url-pattern>/*</url-pattern>" +
+         "</filter-mapping>";
+
+   static Asset WEB_XML = new ByteArrayAsset(Deployments.extendDefaultWebXml(FILTER).getBytes());
+
    @Deployment
    public static WebArchive deployment()
    {
-      return JettyDeployments.jettyfy(Deployments.baseDeployment());
+      return JettyDeployments.jettyfy(Deployments.baseDeployment(WEB_XML)).addClasses(SetupHttpSCCFilter.class, RealTestFilter.class);
    }
 
    @Test
    public void testFactory() throws Exception
    {
-      SeamConversationContext<HttpServletRequest> scc = SeamConversationContextFactory.getContext(HttpServletRequest.class);
-      System.err.println("SeamCC = " + scc);
+      URL url = new URL(Deployments.CONTEXT_PATH);
+      url.openStream().read();
    }
 }

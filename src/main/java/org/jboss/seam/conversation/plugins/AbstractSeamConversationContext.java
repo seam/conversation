@@ -34,7 +34,7 @@ public abstract class AbstractSeamConversationContext<T> implements SeamConversa
 {
    protected abstract void doAssociate(T storage);
 
-   public SeamConversationContext associate(T storage)
+   public SeamConversationContext<T> associate(T storage)
    {
       doAssociate(storage);
       return this;
@@ -42,14 +42,14 @@ public abstract class AbstractSeamConversationContext<T> implements SeamConversa
 
    protected abstract void doDissociate(T storage);
 
-   public SeamConversationContext dissociate(T storage)
+   public SeamConversationContext<T> dissociate(T storage)
    {
       doDissociate(storage);
       return this;
    }
    protected abstract void doActivate(String conversationId);
 
-   public SeamConversationContext activate(String conversationId)
+   public SeamConversationContext<T> activate(String conversationId)
    {
       doActivate(conversationId);
       return this;
@@ -57,7 +57,7 @@ public abstract class AbstractSeamConversationContext<T> implements SeamConversa
 
    protected abstract void doInvalidate();
 
-   public SeamConversationContext invalidate()
+   public SeamConversationContext<T> invalidate()
    {
       doInvalidate();
       return this;
@@ -65,7 +65,7 @@ public abstract class AbstractSeamConversationContext<T> implements SeamConversa
 
    protected abstract void doDeactivate();
 
-   public SeamConversationContext deactivate()
+   public SeamConversationContext<T> deactivate()
    {
       doDeactivate();
       return this;
