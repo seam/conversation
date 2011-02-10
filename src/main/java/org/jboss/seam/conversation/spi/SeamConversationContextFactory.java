@@ -22,6 +22,8 @@
 
 package org.jboss.seam.conversation.spi;
 
+import org.jboss.seam.conversation.plugins.weld.WeldHttpSeamConversationContext;
+
 /**
  * Create SeamConversationContext based on underlying CDI implementation.
  *
@@ -34,16 +36,18 @@ public class SeamConversationContextFactory
    /**
     * Get the current Seam converation context instance.
     *
+    * @param storeType the store type
     * @return get current conversation context instance
     */
-   public static SeamConversationContext getContext()
+   @SuppressWarnings({"unchecked"})
+   public static <T> SeamConversationContext<T> getContext(Class<T> storeType)
    {
       if (context == null)
       {
          synchronized (SeamConversationContextFactory.class)
          {
             if (context == null)
-               context = create();
+               context = create(storeType);
          }
       }
       return context;
@@ -52,10 +56,11 @@ public class SeamConversationContextFactory
    /**
     * Create new SeamConversationContext instance, based on underlying CDI impl.
     *
+    * @param storeType the store type
     * @return new Seam conversaton context
     */
-   private static SeamConversationContext create()
+   private static <T> SeamConversationContext<T> create(Class<T> storeType)
    {
-      return null;
+      return (SeamConversationContext<T>) new WeldHttpSeamConversationContext(); // TODO
    }
 }
