@@ -23,44 +23,27 @@
 package org.jboss.seam.conversation.support;
 
 import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
-import java.io.IOException;
-
-import org.junit.Assert;
-import org.junit.Test;
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class RealTestFilter implements Filter
+@ConversationScoped
+public class MiddleBean implements Serializable
 {
+   private Conversation conversation;
+
+   public Conversation getConversation()
+   {
+      return conversation;
+   }
+
    @Inject
-   private MiddleBean bean;
-
-   public void init(FilterConfig config) throws ServletException
+   public void setConversation(Conversation conversation)
    {
-   }
-
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-   {
-      System.err.println("Testing ...");
-
-      Assert.assertNotNull(bean);
-      Conversation conversation = bean.getConversation();
-      Assert.assertNotNull(conversation);
-      Assert.assertEquals("123", conversation.getId());
-
-      chain.doFilter(request, response);
-   }
-
-   public void destroy()
-   {
+      this.conversation = conversation;
    }
 }
