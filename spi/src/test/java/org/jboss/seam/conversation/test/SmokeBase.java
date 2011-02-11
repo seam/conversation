@@ -29,9 +29,11 @@ import org.jboss.shrinkwrap.api.asset.Asset;
 import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
-import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.WebClient;
 import junit.framework.Assert;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -76,11 +78,15 @@ public class SmokeBase
    @Test
    public void testFactory() throws Exception
    {
-      WebClient client = new WebClient();
-      client.setThrowExceptionOnFailingStatusCode(false);
-      Page page = client.getPage(Deployments.CONTEXT_PATH);
-      Assert.assertEquals(200, page.getWebResponse().getStatusCode());
-      page = client.getPage(Deployments.CONTEXT_PATH + "?cid=123");
-      Assert.assertEquals(200, page.getWebResponse().getStatusCode());
+      SimpleHttpConnectionManager connManager = new SimpleHttpConnectionManager(true);
+      HttpClient client = new HttpClient(connManager);
+
+      HttpMethod method = new GetMethod(Deployments.CONTEXT_PATH);
+      int response = client.executeMethod(method);
+      Assert.assertEquals(200, response);
+
+      method = new GetMethod(Deployments.CONTEXT_PATH + "?cid=123");
+      response = client.executeMethod(method);
+      Assert.assertEquals(200, response);
    }
 }
