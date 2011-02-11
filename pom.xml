@@ -165,10 +165,10 @@
          </build>
       </profile>
       <profile>
-         <id>incontainer</id>
+         <id>weld</id>
          <activation>
             <property>
-               <name>incontainer</name>
+               <name>weld</name>
             </property>
          </activation>
          <dependencies>

@@ -57,7 +57,7 @@ public class SetupHttpSCCFilter implements Filter
       }
       finally
       {
-         scc.invalidate().dissociate((HttpServletRequest) request);
+         scc.invalidate().deactivate().dissociate((HttpServletRequest) request);
       }
    }
 
