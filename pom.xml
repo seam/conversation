@@ -17,6 +17,7 @@
    </prerequisites>
 
    <properties>
+      <cdi.api.version>1.0-SP3</cdi.api.version>
       <servlet.api.version>2.5</servlet.api.version>
       <weld.api.version>1.1.Beta2</weld.api.version>
       <weld.core.version>1.1.0.Final</weld.core.version>
@@ -109,6 +110,12 @@
          <type>test-jar</type>
          <version>${project.version}</version>
          <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>javax.enterprise</groupId>
+         <artifactId>cdi-api</artifactId>
+         <version>${cdi.api.version}</version>
       </dependency>
 
       <dependency>
