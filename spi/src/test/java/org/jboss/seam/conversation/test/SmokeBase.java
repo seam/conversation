@@ -22,8 +22,6 @@
 
 package org.jboss.seam.conversation.test;
 
-import javax.annotation.security.RunAs;
-
 import org.jboss.arquillian.api.Run;
 import org.jboss.arquillian.api.RunModeType;
 import org.jboss.arquillian.junit.Arquillian;
@@ -73,7 +71,9 @@ public class SmokeBase
 
    protected static WebArchive deployment(WebArchive archive, String... args)
    {
-      return TomcatDeployments.tomcatfy(archive.addPackage(SetupHttpSCCFilter.class.getPackage()), args);
+      WebArchive webArchive = TomcatDeployments.tomcatfy(archive.addPackage(SetupHttpSCCFilter.class.getPackage()), args);
+      System.err.println(webArchive.toString(true));
+      return webArchive;
    }
 
    @Test
