@@ -25,7 +25,7 @@ package org.jboss.seam.conversation.plugins.candi;
 import javax.enterprise.context.ConversationScoped;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.seam.conversation.plugins.AbstractHttpSeamConversationContext;
+import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
 
 import com.caucho.config.inject.InjectManager;
 import com.caucho.server.webbeans.ConversationContext;

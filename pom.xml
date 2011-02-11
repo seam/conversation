@@ -95,11 +95,20 @@
       </repository>
    </repositories>
 
-   <dependencies>
+   <dependencyManagement>
+    <dependencies>
       <dependency>
          <groupId>org.jboss.seam.conversation</groupId>
          <artifactId>seam-conversation-spi</artifactId>
          <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.seam.conversation</groupId>
+         <artifactId>seam-conversation-spi</artifactId>
+         <type>test-jar</type>
+         <version>${project.version}</version>
+         <scope>test</scope>
       </dependency>
 
       <dependency>
@@ -165,12 +174,55 @@
          <scope>test</scope>
       </dependency>
 
-      <dependency>
-         <groupId>org.apache.openwebbeans</groupId>
-         <artifactId>openwebbeans-tomcat6</artifactId>
-         <version>${openwebbeans.impl.version}</version>
-         <scope>test</scope>
-      </dependency>
+       <dependency>
+          <groupId>org.apache.tomcat</groupId>
+          <artifactId>catalina</artifactId>
+          <version>${tomcat.version}</version>
+          <scope>test</scope>
+       </dependency>
+
+       <dependency>
+          <groupId>org.apache.tomcat</groupId>
+          <artifactId>coyote</artifactId>
+          <version>${tomcat.version}</version>
+          <scope>provided</scope>
+       </dependency>
+
+       <!-- Make sure this comes before Tomcat's EL on the classpath -->
+       <dependency>
+          <groupId>org.glassfish.web</groupId>
+          <artifactId>el-impl</artifactId>
+          <version>${glassfish.el.version}</version>
+          <scope>test</scope>
+       </dependency>
+
+       <dependency>
+          <groupId>org.apache.tomcat</groupId>
+          <artifactId>jasper</artifactId>
+          <version>${tomcat.version}</version>
+          <scope>provided</scope>
+          <exclusions>
+             <exclusion>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>el-api</artifactId>
+             </exclusion>
+          </exclusions>
+       </dependency>
+
+       <!-- Weld servlet, EL and JSP required for testing CDI injections -->
+       <dependency>
+          <groupId>org.jboss.weld.servlet</groupId>
+          <artifactId>weld-servlet-core</artifactId>
+          <version>${weld.core.version}</version>
+          <scope>test</scope>
+       </dependency>
+
+       <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-jdk14</artifactId>
+          <version>${slf4j.version}</version>
+          <scope>test</scope>
+       </dependency>
 
       <dependency>
          <groupId>org.apache.openwebbeans</groupId>
@@ -180,6 +232,7 @@
       </dependency>
 
    </dependencies>
+ </dependencyManagement>
 
 </project>
 
