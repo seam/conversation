@@ -1,4 +1,5 @@
 .idea
-seam-conversation.iml
 target
+*.iml
+*.ipr
 

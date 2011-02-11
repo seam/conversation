@@ -1,16 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
-
    <parent>
       <artifactId>seam-parent</artifactId>
       <groupId>org.jboss.seam</groupId>
       <version>5</version>
    </parent>
-
    <groupId>org.jboss.seam.conversation</groupId>
    <artifactId>seam-conversation</artifactId>
-   <packaging>jar</packaging>
+   <packaging>pom</packaging>
    <version>3.0.0-SNAPSHOT</version>
    <name>Seam Conversation</name>
 
@@ -29,6 +27,61 @@
       <jetty.version>6.1.21</jetty.version>
    </properties>
 
+   <modules>
+      <module>spi</module>
+      <module>weld</module>
+      <module>owb</module>
+      <module>candi</module>
+   </modules>
+
+   <build>
+     <finalName>${artifactId}</finalName>
+     <plugins>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+         <version>2.0.2</version>
+         <configuration>
+           <source>1.5</source>
+           <target>1.5</target>
+           <showDeprecation>true</showDeprecation>
+           <showWarnings>true</showWarnings>
+           <optimize>true</optimize>
+         </configuration>
+       </plugin>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-release-plugin</artifactId>
+         <version>2.0-beta-9</version>
+         <configuration>
+           <generateReleasePoms>false</generateReleasePoms>
+           <autoVersionSubmodules>true</autoVersionSubmodules>
+         </configuration>
+       </plugin>
+     </plugins>
+     <pluginManagement>
+       <plugins>
+         <plugin>
+           <artifactId>maven-idea-plugin</artifactId>
+           <configuration>
+             <downloadSources>true</downloadSources>
+           </configuration>
+         </plugin>
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-surefire-plugin</artifactId>
+           <version>2.4.3</version>
+           <configuration>
+             <redirectTestOutputToFile>true</redirectTestOutputToFile>
+             <includes>
+               <include>org/jboss/**/*Test.java</include>
+             </includes>
+           </configuration>
+         </plugin>
+       </plugins>
+     </pluginManagement>
+   </build>
+
    <repositories>
       <repository>
          <id>caucho</id>
@@ -43,6 +96,12 @@
    </repositories>
 
    <dependencies>
+      <dependency>
+         <groupId>org.jboss.seam.conversation</groupId>
+         <artifactId>seam-conversation-spi</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
       <dependency>
          <groupId>javax.servlet</groupId>
          <artifactId>servlet-api</artifactId>
@@ -113,275 +172,14 @@
          <scope>test</scope>
       </dependency>
 
+      <dependency>
+         <groupId>org.apache.openwebbeans</groupId>
+         <artifactId>openwebbeans-web</artifactId>
+         <version>${openwebbeans.impl.version}</version>
+         <scope>test</scope>
+      </dependency>
+
    </dependencies>
-
-   <build>
-      <defaultGoal>test</defaultGoal>
-      <plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-            <executions>
-               <execution>
-                  <id>generate-test-report</id>
-                  <phase>test</phase>
-                  <goals>
-                     <goal>report-only</goal>
-                  </goals>
-               </execution>
-            </executions>
-            <configuration>
-               <outputDirectory>${project.build.directory}/surefire-reports</outputDirectory>
-               <outputName>test-report</outputName>
-            </configuration>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-               <!--
-                  Set parallel none to force a more modern JUnitCore
-                  provider that understands Suites,
-                  http://old.nabble.com/Maven-Surefire-and-newer-junit-features-td28539796.html
-               -->
-               <parallel>none</parallel>
-            </configuration>
-         </plugin>
-      </plugins>
-   </build>
-
-   <profiles>
-      <profile>
-         <id>default</id>
-         <activation>
-            <activeByDefault>true</activeByDefault>
-            <property>
-               <name>default</name>
-            </property>
-         </activation>
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-surefire-plugin</artifactId>
-                  <configuration>
-                     <!-- Skip the tests by default, they are all "incontainer" -->
-                     <skipTests>true</skipTests>
-                  </configuration>
-               </plugin>
-            </plugins>
-         </build>
-      </profile>
-      <profile>
-         <id>weld</id>
-         <activation>
-            <property>
-               <name>weld</name>
-            </property>
-         </activation>
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-surefire-plugin</artifactId>
-                  <configuration>
-                     <systemProperties>
-                        <property>
-                           <name>cdi.listener</name>
-                           <value>org.jboss.weld.environment.servlet.Listener</value>
-                        </property>
-                        <property>
-                           <name>cdi.jndi</name>
-                           <value>org.jboss.weld.resources.ManagerObjectFactory</value>
-                        </property>
-                     </systemProperties>
-                  </configuration>
-               </plugin>
-            </plugins>
-         </build>
-         <dependencies>
-
-            <dependency>
-               <groupId>org.jboss.arquillian.container</groupId>
-               <artifactId>arquillian-tomcat-embedded-6</artifactId>
-               <version>${arquillian.version}</version>
-               <scope>test</scope>
-            </dependency>
-
-            <dependency>
-               <groupId>org.apache.tomcat</groupId>
-               <artifactId>catalina</artifactId>
-               <version>${tomcat.version}</version>
-               <scope>test</scope>
-            </dependency>
-
-            <dependency>
-               <groupId>org.apache.tomcat</groupId>
-               <artifactId>coyote</artifactId>
-               <version>${tomcat.version}</version>
-               <scope>provided</scope>
-            </dependency>
-
-            <!-- Make sure this comes before Tomcat's EL on the classpath -->
-            <dependency>
-               <groupId>org.glassfish.web</groupId>
-               <artifactId>el-impl</artifactId>
-               <version>${glassfish.el.version}</version>
-               <scope>test</scope>
-            </dependency>
-
-            <dependency>
-               <groupId>org.apache.tomcat</groupId>
-               <artifactId>jasper</artifactId>
-               <version>${tomcat.version}</version>
-               <scope>provided</scope>
-               <exclusions>
-                  <exclusion>
-                     <groupId>org.apache.tomcat</groupId>
-                     <artifactId>el-api</artifactId>
-                  </exclusion>
-               </exclusions>
-            </dependency>
-
-            <!-- Weld servlet, EL and JSP required for testing CDI injections -->
-            <dependency>
-               <groupId>org.jboss.weld.servlet</groupId>
-               <artifactId>weld-servlet-core</artifactId>
-               <version>${weld.core.version}</version>
-               <scope>test</scope>
-            </dependency>
-
-            <dependency>
-               <groupId>org.jboss.weld</groupId>
-               <artifactId>weld-core</artifactId>
-               <version>${weld.core.version}</version>
-            </dependency>
-
-            <dependency>
-               <groupId>org.slf4j</groupId>
-               <artifactId>slf4j-jdk14</artifactId>
-               <version>${slf4j.version}</version>
-               <scope>test</scope>
-            </dependency>
-
-         </dependencies>
-      </profile>
-      <profile>
-         <id>owb</id>
-         <activation>
-            <property>
-               <name>owb</name>
-            </property>
-         </activation>
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-surefire-plugin</artifactId>
-                  <configuration>
-                     <systemProperties>
-                        <property>
-                           <name>cdi.listener</name>
-                           <value>org.apache.webbeans.web.tomcat.ContextLifecycleListener</value>
-                        </property>
-                        <property>
-                           <name>cdi.jndi</name>
-                           <value>org.apache.webbeans.web.tomcat.OBM</value>
-                        </property>
-                     </systemProperties>
-                  </configuration>
-               </plugin>
-            </plugins>
-         </build>
-         <dependencies>
-
-            <dependency>
-               <groupId>org.jboss.arquillian.container</groupId>
-               <artifactId>arquillian-tomcat-embedded-6</artifactId>
-               <version>${arquillian.version}</version>
-               <scope>test</scope>
-            </dependency>
-
-            <dependency>
-               <groupId>org.apache.tomcat</groupId>
-               <artifactId>catalina</artifactId>
-               <version>${tomcat.version}</version>
-               <scope>test</scope>
-            </dependency>
-
-            <dependency>
-               <groupId>org.apache.tomcat</groupId>
-               <artifactId>coyote</artifactId>
-               <version>${tomcat.version}</version>
-               <scope>provided</scope>
-            </dependency>
-
-            <!-- Make sure this comes before Tomcat's EL on the classpath -->
-            <dependency>
-               <groupId>org.glassfish.web</groupId>
-               <artifactId>el-impl</artifactId>
-               <version>${glassfish.el.version}</version>
-               <scope>test</scope>
-            </dependency>
-
-            <dependency>
-               <groupId>org.apache.tomcat</groupId>
-               <artifactId>jasper</artifactId>
-               <version>${tomcat.version}</version>
-               <scope>provided</scope>
-               <exclusions>
-                  <exclusion>
-                     <groupId>org.apache.tomcat</groupId>
-                     <artifactId>el-api</artifactId>
-                  </exclusion>
-               </exclusions>
-            </dependency>
-
-            <dependency>
-               <groupId>org.apache.openwebbeans</groupId>
-               <artifactId>openwebbeans-impl</artifactId>
-               <version>${openwebbeans.impl.version}</version>
-            </dependency>
-
-            <dependency>
-               <groupId>org.apache.openwebbeans</groupId>
-               <artifactId>openwebbeans-tomcat6</artifactId>
-               <version>${openwebbeans.impl.version}</version>
-               <scope>test</scope>
-            </dependency>
-
-         </dependencies>
-      </profile>
-      <profile>
-         <id>candi</id>
-         <activation>
-            <property>
-               <name>candi</name>
-            </property>
-         </activation>
-         <dependencies>
-
-            <!-- dependency>
-               <groupId>org.jboss.arquillian.container</groupId>
-               <artifactId>arquillian-resin-embedded-4.0</artifactId>
-               <version>${arquillian.version}</version>
-               <scope>test</scope>
-            </dependency -->
-
-            <dependency>
-               <groupId>com.caucho</groupId>
-               <artifactId>resin</artifactId>
-               <version>${candi.impl.version}</version>
-            </dependency>
-            <dependency>
-               <groupId>com.caucho</groupId>
-               <artifactId>resin-javaee</artifactId>
-               <version>${candi.impl.version}</version>
-            </dependency>
-
-         </dependencies>
-      </profile>
-   </profiles>
 
 </project>
 
