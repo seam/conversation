@@ -22,8 +22,6 @@
 
 package org.jboss.seam.conversation.test;
 
-import java.net.URL;
-
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.support.RealTestFilter;
@@ -32,6 +30,9 @@ import org.jboss.shrinkwrap.api.asset.Asset;
 import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.WebClient;
+import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -72,7 +73,11 @@ public class SmokeTest
    @Test
    public void testFactory() throws Exception
    {
-      URL url = new URL(Deployments.CONTEXT_PATH);
-      url.openStream().read();
+      WebClient client = new WebClient();
+      client.setThrowExceptionOnFailingStatusCode(false);
+      Page page = client.getPage(Deployments.CONTEXT_PATH);
+      Assert.assertEquals(200, page.getWebResponse().getStatusCode());
+      page = client.getPage(Deployments.CONTEXT_PATH + "?cid=123");
+      Assert.assertEquals(200, page.getWebResponse().getStatusCode());
    }
 }

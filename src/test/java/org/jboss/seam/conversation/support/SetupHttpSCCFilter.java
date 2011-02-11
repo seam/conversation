@@ -40,13 +40,8 @@ import org.jboss.seam.conversation.spi.SeamConversationContextFactory;
  */
 public class SetupHttpSCCFilter implements Filter
 {
-   private String cid = "123";
-
    public void init(FilterConfig config) throws ServletException
    {
-      String t = config.getInitParameter("cid");
-      if (t != null)
-         cid = t;
    }
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
@@ -54,7 +49,10 @@ public class SetupHttpSCCFilter implements Filter
       SeamConversationContext<HttpServletRequest> scc = SeamConversationContextFactory.getContext(HttpServletRequest.class);
       try
       {
+         String cid = request.getParameter("cid");
          scc.associate((HttpServletRequest) request).activate(cid);
+         System.err.println("SCC set, id = " + cid);
+
          chain.doFilter(request, response);
       }
       finally
