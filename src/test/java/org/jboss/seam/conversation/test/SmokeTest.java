@@ -67,7 +67,7 @@ public class SmokeTest
    @Deployment
    public static WebArchive deployment()
    {
-      return JettyDeployments.jettyfy(Deployments.baseDeployment(WEB_XML)).addPackage(SetupHttpSCCFilter.class.getPackage());
+      return TomcatDeployments.tomcatfy(Deployments.baseDeployment(WEB_XML).addPackage(SetupHttpSCCFilter.class.getPackage()));
    }
 
    @Test

@@ -47,6 +47,7 @@ public class SetupHttpSCCFilter implements Filter
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
    {
       SeamConversationContext<HttpServletRequest> scc = SeamConversationContextFactory.getContext(HttpServletRequest.class);
+      System.err.println("SeamCC = " + scc);
       try
       {
          String cid = request.getParameter("cid");
