@@ -22,8 +22,6 @@
 
 package org.jboss.seam.conversation.test;
 
-import org.jboss.arquillian.api.Run;
-import org.jboss.arquillian.api.RunModeType;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.support.RealTestFilter;
 import org.jboss.seam.conversation.support.SetupHttpSCCFilter;
@@ -43,7 +41,6 @@ import org.junit.runner.RunWith;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 @RunWith(Arquillian.class)
-@Run(RunModeType.AS_CLIENT)
 public class SmokeBase
 {
    static String FILTER = 
