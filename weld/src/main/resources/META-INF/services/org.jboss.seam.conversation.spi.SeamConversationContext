@@ -1,0 +1,2 @@
+org.jboss.seam.conversation.plugins.weld.WeldHttpSeamConversationContext
+org.jboss.seam.conversation.plugins.weld.WeldBoundSeamConversationContext

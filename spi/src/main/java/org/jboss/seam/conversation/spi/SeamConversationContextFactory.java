@@ -22,7 +22,11 @@
 
 package org.jboss.seam.conversation.spi;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.ServiceLoader;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -32,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class SeamConversationContextFactory
 {
-   private static Map<Class<?>, SeamConversationContext> contexts;
+   private static Map<String, SeamConversationContext> contexts;
 
    /**
     * Get the current Seam converation context instance.
@@ -41,9 +45,19 @@ public class SeamConversationContextFactory
     * @return get current conversation context instance
     */
    @SuppressWarnings({"unchecked"})
-   public static <T> SeamConversationContext<T> getContext(Class<T> storeType)
+   public static synchronized <T> SeamConversationContext<T> getContext(Class<T> storeType)
    {
-      return null;
+      if (contexts == null)
+         contexts = new HashMap<String, SeamConversationContext>();
+
+      String type = (storeType != null) ? storeType.getName() : Void.class.getName();
+      SeamConversationContext scc = contexts.get(type);
+      if (scc == null)
+      {
+         scc = create(storeType);
+         contexts.put(type, scc);
+      }
+      return scc;
    }
 
    /**
@@ -53,9 +67,17 @@ public class SeamConversationContextFactory
     * @param storeType the store type
     * @return new Seam conversaton context
     */
+   @SuppressWarnings({"unchecked"})
    private static <T> SeamConversationContext<T> create(Class<T> storeType)
    {
       boolean isNullOrHttp = HttpServletRequest.class.isAssignableFrom(storeType);
+      ServiceLoader<SeamConversationContext> loader = ServiceLoader.load(SeamConversationContext.class);
+      Iterator<SeamConversationContext> iter = loader.iterator();
+      while(iter.hasNext())
+      {
+         SeamConversationContext scc = iter.next();
+         return scc; // TODO
+      }
       throw new IllegalArgumentException("No matching CDI environment available: " + storeType);
    }
 }
