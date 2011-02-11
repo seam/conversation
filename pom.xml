@@ -138,6 +138,12 @@
 
       <dependency>
          <groupId>org.apache.openwebbeans</groupId>
+         <artifactId>openwebbeans-spi</artifactId>
+         <version>${openwebbeans.impl.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.apache.openwebbeans</groupId>
          <artifactId>openwebbeans-impl</artifactId>
          <version>${openwebbeans.impl.version}</version>
       </dependency>
