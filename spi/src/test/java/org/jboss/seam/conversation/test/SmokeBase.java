@@ -22,7 +22,6 @@
 
 package org.jboss.seam.conversation.test;
 
-import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.support.RealTestFilter;
 import org.jboss.seam.conversation.support.SetupHttpSCCFilter;
 import org.jboss.shrinkwrap.api.asset.Asset;
@@ -35,14 +34,12 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Simple smoke test.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-@RunWith(Arquillian.class)
 public class SmokeBase
 {
    static String FILTER = 
