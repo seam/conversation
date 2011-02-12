@@ -26,7 +26,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.support.RealTestFilter;
 import org.jboss.seam.conversation.support.SetupHttpSCCFilter;
 import org.jboss.shrinkwrap.api.asset.Asset;
-import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
+import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 import junit.framework.Assert;
@@ -65,12 +65,13 @@ public class SmokeBase
 
    protected static Asset getWebXml(String... args)
    {
-      return new ByteArrayAsset(Deployments.extendDefaultWebXml(FILTER, args).getBytes());
+      return new StringAsset(Deployments.extendDefaultWebXml(FILTER, args));
    }
 
    protected static WebArchive deployment(WebArchive archive, String... args)
    {
       WebArchive webArchive = TomcatDeployments.tomcatfy(archive.addPackage(SetupHttpSCCFilter.class.getPackage()), args);
+      webArchive.add(new StringAsset("<html/>"), "index.html");
       System.err.println(webArchive.toString(true));
       return webArchive;
    }
@@ -81,11 +82,11 @@ public class SmokeBase
       SimpleHttpConnectionManager connManager = new SimpleHttpConnectionManager(true);
       HttpClient client = new HttpClient(connManager);
 
-      HttpMethod method = new GetMethod(Deployments.CONTEXT_PATH);
+      HttpMethod method = new GetMethod(Deployments.CONTEXT_PATH + "index.html");
       int response = client.executeMethod(method);
       Assert.assertEquals(200, response);
 
-      method = new GetMethod(Deployments.CONTEXT_PATH + "?cid=123");
+      method = new GetMethod(Deployments.CONTEXT_PATH + "index.html?cid=123");
       response = client.executeMethod(method);
       Assert.assertEquals(200, response);
    }

@@ -24,8 +24,7 @@ package org.jboss.seam.conversation.test;
 
 import java.util.Formatter;
 
-import org.jboss.shrinkwrap.api.asset.Asset;
-import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
+import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 /**
@@ -49,6 +48,6 @@ public class TomcatDeployments
          throw new IllegalArgumentException("Null or empty args");
 
       String contextXml = new Formatter().format(CONTEXT_XML, args).toString();
-      return archive.add(new ByteArrayAsset(contextXml.getBytes()), "META-INF/context.xml");
+      return archive.add(new StringAsset(contextXml), "META-INF/context.xml");
    }
 }

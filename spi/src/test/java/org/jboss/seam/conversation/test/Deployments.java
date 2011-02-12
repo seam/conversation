@@ -26,7 +26,7 @@ import java.util.Formatter;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.Asset;
-import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
+import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.weld.environment.servlet.test.util.BeansXml;
 
@@ -42,11 +42,11 @@ public class Deployments
    public static final String DEFAULT_WEB_XML_SUFFIX = "</web-app>";
    public static final String ARQUILLIAN_WEB_XML_SNIPPET = "<servlet><servlet-name>ServletTestRunner</servlet-name><servlet-class>org.jboss.arquillian.protocol.servlet_3.ServletTestRunner</servlet-class></servlet> <servlet-mapping><servlet-name>ServletTestRunner</servlet-name><url-pattern>/ArquillianServletRunner</url-pattern></servlet-mapping>";
    
-   public static final Asset DEFAULT_WEB_XML = new ByteArrayAsset((DEFAULT_WEB_XML_PREFIX + ARQUILLIAN_WEB_XML_SNIPPET + DEFAULT_WEB_XML_SUFFIX).getBytes());
+   public static final Asset DEFAULT_WEB_XML = new StringAsset(DEFAULT_WEB_XML_PREFIX + ARQUILLIAN_WEB_XML_SNIPPET + DEFAULT_WEB_XML_SUFFIX);
    
-   public static final Asset EMPTY_FACES_CONFIG_XML = new ByteArrayAsset("<faces-config version=\"2.0\" xmlns=\"http://java.sun.com/xml/ns/javaee\"></faces-config>".getBytes());
+   public static final Asset EMPTY_FACES_CONFIG_XML = new StringAsset("<faces-config version=\"2.0\" xmlns=\"http://java.sun.com/xml/ns/javaee\"></faces-config>");
    
-   public static final Asset FACES_WEB_XML = new ByteArrayAsset((DEFAULT_WEB_XML_PREFIX + "<listener><listener-class>com.sun.faces.config.ConfigureListener</listener-class></listener> <context-param><param-name>javax.faces.DEFAULT_SUFFIX</param-name><param-value>.xhtml</param-value></context-param> <servlet><servlet-name>Faces Servlet</servlet-name><servlet-class>javax.faces.webapp.FacesServlet</servlet-class><load-on-startup>1</load-on-startup></servlet> <servlet-mapping><servlet-name>Faces Servlet</servlet-name><url-pattern>*.jsf</url-pattern></servlet-mapping> " + DEFAULT_WEB_XML_SUFFIX).getBytes());
+   public static final Asset FACES_WEB_XML = new StringAsset((DEFAULT_WEB_XML_PREFIX + "<listener><listener-class>com.sun.faces.config.ConfigureListener</listener-class></listener> <context-param><param-name>javax.faces.DEFAULT_SUFFIX</param-name><param-value>.xhtml</param-value></context-param> <servlet><servlet-name>Faces Servlet</servlet-name><servlet-class>javax.faces.webapp.FacesServlet</servlet-class><load-on-startup>1</load-on-startup></servlet> <servlet-mapping><servlet-name>Faces Servlet</servlet-name><url-pattern>*.jsf</url-pattern></servlet-mapping> " + DEFAULT_WEB_XML_SUFFIX));
 
    public static WebArchive baseDeployment(BeansXml beansXml, Asset webXml)
    {
