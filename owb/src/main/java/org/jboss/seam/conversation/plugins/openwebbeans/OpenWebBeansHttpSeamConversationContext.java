@@ -33,8 +33,13 @@ import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
  */
 public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamConversationContext
 {
+   static ThreadLocal<String> cids = new ThreadLocal<String>();
+   static ThreadLocal<String> sessions = new ThreadLocal<String>();
+
    protected void doAssociate(HttpServletRequest request)
    {
+      cids.set(request.getParameter("cid"));
+      sessions.set(request.getSession().getId());
    }
 
    protected void doActivate(String conversationId)
@@ -54,5 +59,7 @@ public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamCon
 
    protected void doDissociate(HttpServletRequest request)
    {
+      cids.remove();
+      sessions.remove();
    }
 }

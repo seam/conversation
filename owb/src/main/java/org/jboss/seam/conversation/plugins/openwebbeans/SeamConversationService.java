@@ -33,11 +33,11 @@ class SeamConversationService implements ConversationService
 {
    public String getConversationId()
    {
-      return "123";  //TODO
+      return OpenWebBeansHttpSeamConversationContext.cids.get();
    }
 
    public String getConversationSessionId()
    {
-      return null;  //TODO
+      return OpenWebBeansHttpSeamConversationContext.sessions.get();
    }
 }
