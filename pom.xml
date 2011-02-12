@@ -244,6 +244,13 @@
          <scope>test</scope>
       </dependency>
 
+      <dependency>
+         <groupId>org.apache.openwebbeans</groupId>
+         <artifactId>openwebbeans-resource</artifactId>
+         <version>${openwebbeans.impl.version}</version>
+         <scope>test</scope>
+      </dependency>
+
    </dependencies>
  </dependencyManagement>
 

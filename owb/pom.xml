@@ -86,6 +86,12 @@
          <artifactId>openwebbeans-web</artifactId>
          <scope>test</scope>
       </dependency>
+
+      <dependency>
+         <groupId>org.apache.openwebbeans</groupId>
+         <artifactId>openwebbeans-resource</artifactId>
+         <scope>test</scope>
+      </dependency>
    </dependencies>
 
 </project>

@@ -37,7 +37,7 @@ public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamCon
 
    protected void doAssociate(HttpServletRequest request)
    {
-      String sessionId = request.getSession(false).getId();
+      String sessionId = request.getSession().getId();
       sessionIds.set(sessionId);
    }
 
@@ -58,7 +58,7 @@ public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamCon
 
    protected void doDissociate(HttpServletRequest request)
    {
-      String sessionId = request.getSession(false).getId();
+      String sessionId = request.getSession().getId();
       if (sessionId.equals(sessionIds.get()))
          sessionIds.remove();
    }

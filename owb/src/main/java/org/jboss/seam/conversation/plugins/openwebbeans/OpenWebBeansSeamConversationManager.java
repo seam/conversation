@@ -23,9 +23,11 @@
 package org.jboss.seam.conversation.plugins.openwebbeans;
 
 import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 
 import java.util.Map;
 
+import org.apache.webbeans.container.BeanManagerImpl;
 import org.apache.webbeans.context.ConversationContext;
 import org.apache.webbeans.conversation.ConversationImpl;
 import org.apache.webbeans.conversation.ConversationManager;
@@ -43,7 +45,8 @@ class OpenWebBeansSeamConversationManager
       if (manager.isConversationExistWithGivenId(conversationId) == false)
       {
          Conversation conversation = new ConversationImpl(sessionId);
-         manager.addConversationContext(conversation, null);
+         ConversationContext context = (ConversationContext) BeanManagerImpl.getManager().getContext(ConversationScoped.class);
+         manager.addConversationContext(conversation, context);
       }
    }
 
