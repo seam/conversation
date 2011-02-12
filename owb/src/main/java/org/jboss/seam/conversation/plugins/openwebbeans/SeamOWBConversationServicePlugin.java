@@ -22,37 +22,40 @@
 
 package org.jboss.seam.conversation.plugins.openwebbeans;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
+import org.apache.webbeans.spi.ConversationService;
+import org.apache.webbeans.spi.plugins.OpenWebBeansPlugin;
 
 /**
- * OpenWebBeans Http based Seam conversation context.
+ * Provide ConversationService plugin.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamConversationContext
+public class SeamOWBConversationServicePlugin implements OpenWebBeansPlugin
 {
-   protected void doAssociate(HttpServletRequest request)
+   public void startUp() throws Exception
    {
    }
 
-   protected void doActivate(String conversationId)
+   public void shutDown() throws Exception
    {
-      OpenWebBeansSeamConversationManager.doActivate(conversationId);
    }
 
-   protected void doInvalidate()
+   public void isManagedBean(Class<?> clazz) throws Exception
    {
-      OpenWebBeansSeamConversationManager.doInvalidate();
    }
 
-   protected void doDeactivate()
+   public boolean supportService(Class<?> serviceClass)
    {
-      OpenWebBeansSeamConversationManager.doDeactivate();
+      return ConversationService.class.equals(serviceClass);
    }
 
-   protected void doDissociate(HttpServletRequest request)
+   public boolean supportsJavaEeComponentInjections(Class<?> targetClass)
    {
+      return false;
+   }
+
+   public <T> T getSupportedService(Class<T> serviceClass)
+   {
+      return (T) new SeamConversationService();
    }
 }

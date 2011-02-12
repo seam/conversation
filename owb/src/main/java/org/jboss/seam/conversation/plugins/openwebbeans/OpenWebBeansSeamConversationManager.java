@@ -22,12 +22,11 @@
 
 package org.jboss.seam.conversation.plugins.openwebbeans;
 
+import javax.enterprise.context.BusyConversationException;
 import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.NonexistentConversationException;
 
-import java.util.Map;
-
-import org.apache.webbeans.container.BeanManagerImpl;
+import org.apache.webbeans.context.ContextFactory;
 import org.apache.webbeans.context.ConversationContext;
 import org.apache.webbeans.conversation.ConversationImpl;
 import org.apache.webbeans.conversation.ConversationManager;
@@ -39,14 +38,35 @@ import org.apache.webbeans.conversation.ConversationManager;
  */
 class OpenWebBeansSeamConversationManager
 {
-   static void doActivate(String conversationId, String sessionId)
+   static void doActivate(String cid)
    {
-      ConversationManager manager = ConversationManager.getInstance();
-      if (manager.isConversationExistWithGivenId(conversationId) == false)
+      ConversationManager conversationManager = ConversationManager.getInstance();
+      Conversation conversation = conversationManager.getConversationBeanReference();
+
+      if (conversation.isTransient())
       {
-         Conversation conversation = new ConversationImpl(sessionId);
-         ConversationContext context = (ConversationContext) BeanManagerImpl.getManager().getContext(ConversationScoped.class);
-         manager.addConversationContext(conversation, context);
+          ContextFactory.initConversationContext(null);
+          //Not restore, throw exception
+          if(cid != null && "".equals(cid) == false)
+          {
+              throw new NonexistentConversationException("Propogated conversation with cid=" + cid + " is not restored. It creates a new transient conversation.");
+          }
+      }
+      else
+      {
+          //Conversation must be used by one thread at a time
+          ConversationImpl owbConversation = (ConversationImpl)conversation;
+          if(owbConversation.getInUsed().compareAndSet(false, true) == false)
+          {
+              ContextFactory.initConversationContext(null);
+              //Throw Busy exception
+              throw new BusyConversationException("Propogated conversation with cid=" + cid + " is used by other request. It creates a new transient conversation");
+          }
+          else
+          {
+              ConversationContext conversationContext = conversationManager.getConversationContext(conversation);
+              ContextFactory.initConversationContext(conversationContext);
+          }
       }
    }
 
@@ -56,16 +76,22 @@ class OpenWebBeansSeamConversationManager
       manager.destroyWithRespectToTimout();
    }
 
-   static void doDeactivate(String sessionId)
+   static void doDeactivate()
    {
-      ConversationManager manager = ConversationManager.getInstance();
-      Map<Conversation, ConversationContext> map = manager.getConversationMapWithSessionId(sessionId);
-      for (Map.Entry<Conversation, ConversationContext> entry : map.entrySet())
+      ConversationManager conversationManager = ConversationManager.getInstance();
+      Conversation conversation = conversationManager.getConversationBeanReference();
+
+      if (conversation.isTransient())
       {
-         Conversation conversation = entry.getKey();
-         if (conversation.isTransient())
-            entry.getValue().destroy();
-         manager.removeConversation(conversation);
+          ContextFactory.destroyConversationContext();
+      }
+      else
+      {
+          //Conversation must be used by one thread at a time
+          ConversationImpl owbConversation = (ConversationImpl)conversation;
+          owbConversation.updateTimeOut();
+          //Other threads can now access propogated conversation.
+          owbConversation.setInUsed(false);
       }
    }
 }

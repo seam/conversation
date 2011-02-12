@@ -22,37 +22,22 @@
 
 package org.jboss.seam.conversation.plugins.openwebbeans;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
+import org.apache.webbeans.spi.ConversationService;
 
 /**
- * OpenWebBeans Http based Seam conversation context.
+ * Provide Seam ConversationService.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamConversationContext
+class SeamConversationService implements ConversationService
 {
-   protected void doAssociate(HttpServletRequest request)
+   public String getConversationId()
    {
+      return "123";  //TODO
    }
 
-   protected void doActivate(String conversationId)
+   public String getConversationSessionId()
    {
-      OpenWebBeansSeamConversationManager.doActivate(conversationId);
-   }
-
-   protected void doInvalidate()
-   {
-      OpenWebBeansSeamConversationManager.doInvalidate();
-   }
-
-   protected void doDeactivate()
-   {
-      OpenWebBeansSeamConversationManager.doDeactivate();
-   }
-
-   protected void doDissociate(HttpServletRequest request)
-   {
+      return null;  //TODO
    }
 }
