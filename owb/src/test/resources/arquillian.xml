@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arquillian xmlns="http://jboss.com/arquillian"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:tomcat6="urn:arq:org.jboss.arquillian.container.tomcat.embedded_6">
+
+  <tomcat6:container>
+      <!-- unpackArchive must be true if using the Weld Servlet module -->
+  <tomcat6:unpackArchive>true</tomcat6:unpackArchive>
+</tomcat6:container>
+
+</arquillian>
