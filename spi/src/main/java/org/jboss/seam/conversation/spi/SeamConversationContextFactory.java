@@ -22,6 +22,8 @@
 
 package org.jboss.seam.conversation.spi;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -29,6 +31,7 @@ import java.util.ServiceLoader;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,10 +44,26 @@ public class SeamConversationContextFactory
 {
    private static Map<String, SeamConversationContext> contexts;
 
+   /**
+    * Produce matching Seam conversation context.
+    *
+    * @param ip current injection point
+    * @param <T> exact store type
+    * @return new Seam conversation context instance
+    */
+   @SuppressWarnings({"unchecked"})
    @Produces
    public static <T> SeamConversationContext<T> produce(InjectionPoint ip)
    {
-      return getContext(null);
+      Annotated annotated = ip.getAnnotated();
+      Type baseType = annotated.getBaseType();
+      Class<?> storeType = null;
+      if (baseType instanceof ParameterizedType)
+      {
+         ParameterizedType pt = (ParameterizedType) baseType;
+         storeType = (Class<?>) pt.getActualTypeArguments()[0];
+      }
+      return (SeamConversationContext<T>) getContext(storeType);
    }
 
    /**
