@@ -24,6 +24,7 @@ package org.jboss.seam.conversation.test;
 
 import org.jboss.arquillian.api.Run;
 import org.jboss.arquillian.api.RunModeType;
+import org.jboss.seam.conversation.spi.SeamConversationContext;
 import org.jboss.seam.conversation.support.RealTestFilter;
 import org.jboss.seam.conversation.support.SetupHttpSCCFilter;
 import org.jboss.shrinkwrap.api.asset.Asset;
@@ -70,7 +71,10 @@ public class SmokeBase
 
    protected static WebArchive deployment(WebArchive archive, String... args)
    {
-      WebArchive webArchive = TomcatDeployments.tomcatfy(archive.addPackage(SetupHttpSCCFilter.class.getPackage()), args);
+      archive.addPackage(SetupHttpSCCFilter.class.getPackage());
+      archive.addPackage(SeamConversationContext.class.getPackage());
+
+      WebArchive webArchive = TomcatDeployments.tomcatfy(archive, args);
       webArchive.add(new StringAsset("<html/>"), "index.html");
       System.err.println(webArchive.toString(true));
       return webArchive;

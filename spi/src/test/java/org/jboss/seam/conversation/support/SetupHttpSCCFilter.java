@@ -22,6 +22,7 @@
 
 package org.jboss.seam.conversation.support;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -40,13 +41,15 @@ import org.jboss.seam.conversation.spi.SeamConversationContextFactory;
  */
 public class SetupHttpSCCFilter implements Filter
 {
+   @Inject
+   private SeamConversationContext<HttpServletRequest> scc;
+
    public void init(FilterConfig config) throws ServletException
    {
    }
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
    {
-      SeamConversationContext<HttpServletRequest> scc = SeamConversationContextFactory.getContext(HttpServletRequest.class);
       System.err.println("SeamCC = " + scc);
       try
       {

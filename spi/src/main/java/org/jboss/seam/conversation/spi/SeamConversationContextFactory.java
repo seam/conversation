@@ -27,6 +27,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -37,6 +40,12 @@ import javax.servlet.http.HttpServletRequest;
 public class SeamConversationContextFactory
 {
    private static Map<String, SeamConversationContext> contexts;
+
+   @Produces
+   public static <T> SeamConversationContext<T> produce(InjectionPoint ip)
+   {
+      return getContext(null);
+   }
 
    /**
     * Get the current Seam converation context instance.
@@ -70,7 +79,7 @@ public class SeamConversationContextFactory
    @SuppressWarnings({"unchecked"})
    private static <T> SeamConversationContext<T> create(Class<T> storeType)
    {
-      boolean isNullOrHttp = HttpServletRequest.class.isAssignableFrom(storeType);
+      boolean isNullOrHttp = storeType == null || HttpServletRequest.class.isAssignableFrom(storeType);
       ServiceLoader<SeamConversationContext> loader = ServiceLoader.load(SeamConversationContext.class);
       Iterator<SeamConversationContext> iter = loader.iterator();
       while(iter.hasNext())
