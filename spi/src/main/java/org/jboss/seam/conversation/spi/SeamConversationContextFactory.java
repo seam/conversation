@@ -56,12 +56,15 @@ public class SeamConversationContextFactory
    public static <T> SeamConversationContext<T> produce(InjectionPoint ip)
    {
       Annotated annotated = ip.getAnnotated();
-      Type baseType = annotated.getBaseType();
       Class<?> storeType = null;
-      if (baseType instanceof ParameterizedType)
+      if (annotated != null)
       {
-         ParameterizedType pt = (ParameterizedType) baseType;
-         storeType = (Class<?>) pt.getActualTypeArguments()[0];
+         Type baseType = annotated.getBaseType();
+         if (baseType instanceof ParameterizedType)
+         {
+            ParameterizedType pt = (ParameterizedType) baseType;
+            storeType = (Class<?>) pt.getActualTypeArguments()[0];
+         }
       }
       return (SeamConversationContext<T>) getContext(storeType);
    }

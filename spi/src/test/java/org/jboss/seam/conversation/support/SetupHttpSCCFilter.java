@@ -34,13 +34,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import org.jboss.seam.conversation.spi.SeamConversationContext;
-import org.jboss.seam.conversation.spi.SeamConversationContextFactory;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class SetupHttpSCCFilter implements Filter
 {
+   @SuppressWarnings({"UnusedDeclaration"})
    @Inject
    private SeamConversationContext<HttpServletRequest> scc;
 
@@ -50,19 +50,12 @@ public class SetupHttpSCCFilter implements Filter
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
    {
-      System.err.println("SeamCC = " + scc);
       try
       {
          String cid = request.getParameter("cid");
          scc.associate((HttpServletRequest) request).activate(cid);
-         System.err.println("SCC set, id = " + cid);
 
          chain.doFilter(request, response);
-      }
-      catch (Throwable t)
-      {
-         t.printStackTrace();
-         throw new RuntimeException(t);
       }
       finally
       {
