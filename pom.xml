@@ -251,6 +251,13 @@
          <scope>test</scope>
       </dependency>
 
+      <dependency>
+         <groupId>org.apache.openwebbeans</groupId>
+         <artifactId>openwebbeans-tomcat6</artifactId>
+         <version>${openwebbeans.impl.version}</version>
+         <scope>test</scope>
+      </dependency>
+
    </dependencies>
  </dependencyManagement>
 

@@ -33,7 +33,11 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
  */
 public class TomcatDeployments
 {
-   public static final String CONTEXT_XML = "<Context><Manager pathname=\"\" /> <Resource name=\"BeanManager\" auth=\"Container\" type=\"javax.inject.manager.BeanManager\" factory=\"%1s\"/></Context>";
+   public static final String CONTEXT_XML =
+         "<Context>" +
+         "%1s" +
+         "<Manager pathname=\"\" /> <Resource name=\"BeanManager\" auth=\"Container\" type=\"javax.inject.manager.BeanManager\" factory=\"%2s\"/>" +
+         "</Context>";
 
    /**
     * Add Tomcat specific metadata.

@@ -56,6 +56,11 @@ public class SetupHttpSCCFilter implements Filter
 
          chain.doFilter(request, response);
       }
+      catch (Throwable t)
+      {
+         t.printStackTrace();
+         throw new RuntimeException(t);
+      }
       finally
       {
          scc.invalidate().deactivate().dissociate((HttpServletRequest) request);

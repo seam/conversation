@@ -25,9 +25,9 @@ package org.jboss.seam.conversation.test;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.plugins.openwebbeans.ManagerObjectFactory;
+import org.jboss.seam.conversation.support.HackContextLifecycleListener;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
-import org.apache.webbeans.servlet.WebBeansConfigurationListener;
 import org.junit.runner.RunWith;
 
 /**
@@ -42,8 +42,8 @@ public class OWBSmokeTest extends SmokeBase
    public static WebArchive deployment()
    {
       return deployment(
-            Deployments.baseDeployment(getWebXml(WebBeansConfigurationListener.class.getName())),
-            ManagerObjectFactory.class.getName()
+            Deployments.baseDeployment(getWebXml("")),
+            "<Listener className=\"" + HackContextLifecycleListener.class.getName() + "\"/>", ManagerObjectFactory.class.getName()
             );
    }
 }

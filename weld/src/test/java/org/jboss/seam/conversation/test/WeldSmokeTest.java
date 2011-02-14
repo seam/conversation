@@ -42,8 +42,8 @@ public class WeldSmokeTest extends SmokeBase
    public static WebArchive deployment()
    {
       return deployment(
-            Deployments.baseDeployment(getWebXml(Listener.class.getName())),
-            ManagerObjectFactory.class.getName()
+            Deployments.baseDeployment(getWebXml("<listener><listener-class>" + Listener.class.getName() + "</listener-class></listener>")),
+            "", ManagerObjectFactory.class.getName()
             );
    }
 }
