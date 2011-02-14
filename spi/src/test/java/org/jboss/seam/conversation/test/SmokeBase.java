@@ -22,6 +22,8 @@
 
 package org.jboss.seam.conversation.test;
 
+import org.jboss.arquillian.api.Run;
+import org.jboss.arquillian.api.RunModeType;
 import org.jboss.seam.conversation.support.RealTestFilter;
 import org.jboss.seam.conversation.support.SetupHttpSCCFilter;
 import org.jboss.shrinkwrap.api.asset.Asset;
@@ -40,6 +42,7 @@ import org.junit.Test;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
+@Run(RunModeType.AS_CLIENT)
 public class SmokeBase
 {
    static String FILTER = 
@@ -76,6 +79,8 @@ public class SmokeBase
    @Test
    public void testFactory() throws Exception
    {
+      Thread.sleep(10000L);
+
       SimpleHttpConnectionManager connManager = new SimpleHttpConnectionManager(true);
       HttpClient client = new HttpClient(connManager);
 
