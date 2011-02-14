@@ -24,6 +24,7 @@ package org.jboss.seam.conversation.test;
 
 import java.util.Formatter;
 
+import org.jboss.seam.conversation.support.DummyServlet;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.Asset;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
@@ -38,10 +39,14 @@ public class Deployments
 {
    public static final String CONTEXT_PATH = "http://localhost:8080/test/";
 
-   public static final String DEFAULT_WEB_XML_PREFIX = "<web-app>%1s <resource-env-ref><resource-env-ref-name>BeanManager</resource-env-ref-name><resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type></resource-env-ref> ";
+   public static final String DEFAULT_WEB_XML_PREFIX = "<web-app>%1s <resource-env-ref><resource-env-ref-name>BeanManager</resource-env-ref-name><resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type></resource-env-ref> <welcome-file-list><welcome-file>index.html</welcome-file></welcome-file-list>";
    public static final String DEFAULT_WEB_XML_SUFFIX = "</web-app>";
-   public static final String ARQUILLIAN_WEB_XML_SNIPPET = "<servlet><servlet-name>ServletTestRunner</servlet-name><servlet-class>org.jboss.arquillian.protocol.servlet_3.ServletTestRunner</servlet-class></servlet> <servlet-mapping><servlet-name>ServletTestRunner</servlet-name><url-pattern>/ArquillianServletRunner</url-pattern></servlet-mapping>";
-   
+   public static final String ARQUILLIAN_WEB_XML_SNIPPET =
+         "<servlet><servlet-name>DummyServlet</servlet-name><servlet-class>" + DummyServlet.class.getName() + "</servlet-class></servlet>" +
+         "<servlet><servlet-name>ServletTestRunner</servlet-name><servlet-class>org.jboss.arquillian.protocol.servlet_3.ServletTestRunner</servlet-class></servlet>" +
+         "<servlet-mapping><servlet-name>DummyServlet</servlet-name><url-pattern>/dummy/</url-pattern></servlet-mapping>" +
+         "<servlet-mapping><servlet-name>ServletTestRunner</servlet-name><url-pattern>/ArquillianServletRunner</url-pattern></servlet-mapping>";
+
    public static final Asset DEFAULT_WEB_XML = new StringAsset(DEFAULT_WEB_XML_PREFIX + ARQUILLIAN_WEB_XML_SNIPPET + DEFAULT_WEB_XML_SUFFIX);
    
    public static final Asset EMPTY_FACES_CONFIG_XML = new StringAsset("<faces-config version=\"2.0\" xmlns=\"http://java.sun.com/xml/ns/javaee\"></faces-config>");

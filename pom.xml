@@ -94,6 +94,16 @@
             <updatePolicy>never</updatePolicy>
          </releases>
       </repository>
+      <repository>
+         <id>x</id>
+         <name>X Maven Repository</name>
+         <url>http://x.y.com</url>
+         <layout>default</layout>
+         <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+         </releases>
+      </repository>
    </repositories>
 
    <dependencyManagement>

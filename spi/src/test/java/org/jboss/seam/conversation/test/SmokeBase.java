@@ -79,16 +79,16 @@ public class SmokeBase
    @Test
    public void testFactory() throws Exception
    {
-      Thread.sleep(10000L);
+      Thread.sleep(1000L);
 
       SimpleHttpConnectionManager connManager = new SimpleHttpConnectionManager(true);
       HttpClient client = new HttpClient(connManager);
 
-      HttpMethod method = new GetMethod(Deployments.CONTEXT_PATH + "index.html");
+      HttpMethod method = new GetMethod(Deployments.CONTEXT_PATH + "dummy/");
       int response = client.executeMethod(method);
       Assert.assertEquals(200, response);
 
-      method = new GetMethod(Deployments.CONTEXT_PATH + "index.html?cid=123");
+      method = new GetMethod(Deployments.CONTEXT_PATH + "dummy/?cid=123");
       response = client.executeMethod(method);
       Assert.assertEquals(200, response);
    }

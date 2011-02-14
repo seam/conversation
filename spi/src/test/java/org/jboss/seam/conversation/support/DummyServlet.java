@@ -20,13 +20,24 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.seam.conversation.test;
+package org.jboss.seam.conversation.support;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 
 /**
- * Simple smoke test.
+ * Dummy servlet.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class CanDISmokeTestDisabled // extends SmokeBase // TODO
+public class DummyServlet extends HttpServlet
 {
+   protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+   {
+      resp.getWriter().write("OK");
+   }
 }
