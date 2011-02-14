@@ -22,22 +22,35 @@
 
 package org.jboss.seam.conversation.plugins.openwebbeans;
 
+import javax.naming.CompositeName;
 import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.spi.ObjectFactory;
 
 import java.util.Hashtable;
 
+import org.apache.webbeans.container.BeanManagerImpl;
+
 /**
  * OpenWebBeans jndi object factory.
- * TODO -- remove this once we upgrade to OWB 1.1
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class ManagerObjectFactory implements ObjectFactory
 {
+   private final CompositeName BEAN_MANAGER;
+
+   public ManagerObjectFactory() throws Exception
+   {
+      BEAN_MANAGER = new CompositeName("BeanManager");
+   }
+
    public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment) throws Exception
    {
+      if (name.endsWith(BEAN_MANAGER))
+      {
+         return BeanManagerImpl.getManager();
+      }
       return null;
    }
 }
