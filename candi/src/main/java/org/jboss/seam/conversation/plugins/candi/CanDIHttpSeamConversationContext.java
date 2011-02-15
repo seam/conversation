@@ -42,6 +42,27 @@ public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversati
    private ConversationContext context;
    private static ThreadLocal<HttpServletRequest> requests = new ThreadLocal<HttpServletRequest>();
 
+   /**
+    * Get context.
+    *
+    * @return the context.
+    */
+   protected ConversationContext getContext()
+   {
+      if (context == null)
+      {
+         synchronized (this)
+         {
+            if (context == null)
+            {
+               InjectManager manager = InjectManager.create();
+               context = (ConversationContext) manager.getContext(ConversationScoped.class);
+            }
+         }
+      }
+      return context;
+   }
+
    protected void doAssociate(HttpServletRequest request)
    {
       requests.set(request);
@@ -74,15 +95,9 @@ public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversati
 
    protected void doDissociate(HttpServletRequest request)
    {
-      if (context == null)
-      {
-         InjectManager manager = InjectManager.create();
-         context = (ConversationContext) manager.getContext(ConversationScoped.class);
-      }
-
       try
       {
-         context.destroy();
+         getContext().destroy();
       }
       finally
       {
