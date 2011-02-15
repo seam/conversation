@@ -24,6 +24,7 @@ package org.jboss.seam.conversation.test;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.seam.conversation.plugins.candi.ManagerObjectFactory;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 import org.junit.runner.RunWith;
@@ -41,7 +42,7 @@ public class CanDISmokeTest extends SmokeBase
    {
       return deployment(
             Deployments.baseDeployment(getWebXml("")),
-            "", Object.class.getName()
+            "", ManagerObjectFactory.class.getName()
             );
    }
 }

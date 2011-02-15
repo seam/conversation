@@ -20,16 +20,16 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.seam.conversation.plugins.openwebbeans;
+package org.jboss.seam.conversation.plugins.candi;
 
 import javax.enterprise.inject.spi.BeanManager;
 
 import org.jboss.seam.conversation.api.AbstractManagerObjectFactory;
 
-import org.apache.webbeans.container.BeanManagerImpl;
+import com.caucho.config.inject.InjectManager;
 
 /**
- * OpenWebBeans jndi object factory.
+ * CanDI BeanManager ObjectFactory.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
@@ -37,6 +37,6 @@ public class ManagerObjectFactory extends AbstractManagerObjectFactory
 {
    protected BeanManager getBeanManager()
    {
-      return BeanManagerImpl.getManager();
+      return InjectManager.create();
    }
 }
