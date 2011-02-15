@@ -22,18 +22,17 @@
 
 package org.jboss.seam.conversation.spi;
 
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.Annotated;
+import javax.enterprise.inject.spi.InjectionPoint;
+import javax.servlet.http.HttpServletRequest;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.Annotated;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Create SeamConversationContext based on underlying CDI implementation.
@@ -70,7 +69,9 @@ public class SeamConversationContextFactory
    }
 
    /**
-    * Get the current Seam converation context instance.
+    * Get the current Seam conversation context instance.
+    * If null is passed as store type,
+    * we try to use CDI impl's default HTTP based SeamConversationContext.
     *
     * @param storeType the store type
     * @return get current conversation context instance
@@ -81,7 +82,10 @@ public class SeamConversationContextFactory
       if (contexts == null)
          contexts = new HashMap<String, SeamConversationContext>();
 
-      String type = (storeType != null) ? storeType.getName() : Void.class.getName();
+      if (storeType == null)
+         storeType = (Class<T>) HttpServletRequest.class;
+
+      String type = storeType.getName();
       SeamConversationContext scc = contexts.get(type);
       if (scc == null)
       {
@@ -93,15 +97,13 @@ public class SeamConversationContextFactory
 
    /**
     * Create new SeamConversationContext instance, based on underlying CDI impl.
-    * If null is passed as store type, we use CDI impl's default HTTP based SeamConversationContext.
     *
     * @param storeType the store type
-    * @return new Seam conversaton context
+    * @return new Seam conversation context
     */
    @SuppressWarnings({"unchecked"})
    private static <T> SeamConversationContext<T> create(Class<T> storeType)
    {
-      boolean isNullOrHttp = storeType == null || HttpServletRequest.class.isAssignableFrom(storeType);
       ServiceLoader<SeamConversationContext> loader = ServiceLoader.load(SeamConversationContext.class);
       Iterator<SeamConversationContext> iter = loader.iterator();
       while(iter.hasNext())
