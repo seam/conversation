@@ -2,4 +2,6 @@
 target
 *.iml
 *.ipr
+candi/seam-conversation.log
+candi/resin-data/
 

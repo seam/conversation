@@ -60,11 +60,11 @@ class HackFacesContext extends FacesContext
       hec.doActivate(conversationId);
    }
 
-   static void doDectivate()
+   static void doDeactivate()
    {
       HackFacesContext hfc = (HackFacesContext) getCurrentInstance();
       HackExternalContext hec = hfc.getExternalContext();
-      hec.doDectivate();
+      hec.doDeactivate();
    }
 
    public HackExternalContext getExternalContext()

@@ -71,7 +71,7 @@ class HackExternalContext extends ExternalContext
       }
    }
 
-   void doDectivate()
+   void doDeactivate()
    {
       requestMap.remove("cid");
       requestMap.remove("caucho.cid");

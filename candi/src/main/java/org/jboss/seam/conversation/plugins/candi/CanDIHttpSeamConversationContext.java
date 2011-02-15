@@ -90,7 +90,7 @@ public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversati
       if (request == null)
          throw new IllegalArgumentException("Forgot to associate request with conversation context?");
 
-      HackFacesContext.doDectivate();
+      HackFacesContext.doDeactivate();
    }
 
    protected void doDissociate(HttpServletRequest request)
