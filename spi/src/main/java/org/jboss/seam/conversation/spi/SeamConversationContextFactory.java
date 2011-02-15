@@ -47,12 +47,11 @@ public class SeamConversationContextFactory
     * Produce matching Seam conversation context.
     *
     * @param ip current injection point
-    * @param <T> exact store type
     * @return new Seam conversation context instance
     */
    @SuppressWarnings({"unchecked"})
    @Produces
-   public static <T> SeamConversationContext<T> produce(InjectionPoint ip)
+   public static SeamConversationContext produce(InjectionPoint ip)
    {
       Annotated annotated = ip.getAnnotated();
       Class<?> storeType = null;
@@ -65,7 +64,7 @@ public class SeamConversationContextFactory
             storeType = (Class<?>) pt.getActualTypeArguments()[0];
          }
       }
-      return (SeamConversationContext<T>) getContext(storeType);
+      return getContext(storeType);
    }
 
    /**

@@ -22,11 +22,26 @@
 
 package org.jboss.seam.conversation.test;
 
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+
+import org.junit.runner.RunWith;
+
 /**
  * Simple smoke test.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class CanDISmokeTestDisabled // extends SmokeBase // TODO
+@RunWith(Arquillian.class)
+public class CanDISmokeTest extends SmokeBase
 {
+   @Deployment
+   public static WebArchive deployment()
+   {
+      return deployment(
+            Deployments.baseDeployment(getWebXml("")),
+            "", Object.class.getName()
+            );
+   }
 }

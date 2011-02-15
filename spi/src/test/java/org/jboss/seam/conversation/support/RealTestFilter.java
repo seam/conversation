@@ -41,7 +41,7 @@ import org.junit.Assert;
  */
 public class RealTestFilter implements Filter
 {
-   private String cId = "123";
+   private String cId = "1234";
 
    @Inject
    private MiddleBean bean;

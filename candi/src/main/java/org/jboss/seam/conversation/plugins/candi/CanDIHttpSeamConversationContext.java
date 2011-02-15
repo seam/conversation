@@ -42,15 +42,10 @@ public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversati
    private ConversationContext context;
    private static ThreadLocal<HttpServletRequest> requests = new ThreadLocal<HttpServletRequest>();
 
-   public CanDIHttpSeamConversationContext()
-   {
-      InjectManager manager = InjectManager.create();
-      context = (ConversationContext) manager.getContext(ConversationScoped.class);
-   }
-
    protected void doAssociate(HttpServletRequest request)
    {
       requests.set(request);
+      HackFacesContext.setCurrent(request);
       // real associate work is done in ConversationContext::createJsfScope
    }
 
@@ -60,7 +55,7 @@ public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversati
       if (request == null)
          throw new IllegalArgumentException("Forgot to associate request with conversation context?");
 
-      request.setAttribute("caucho.cid", conversationId);
+      HackFacesContext.doActivate(conversationId);
    }
 
    protected void doInvalidate()
@@ -74,11 +69,17 @@ public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversati
       if (request == null)
          throw new IllegalArgumentException("Forgot to associate request with conversation context?");
 
-      request.removeAttribute("caucho.cid");
+      HackFacesContext.doDectivate();
    }
 
    protected void doDissociate(HttpServletRequest request)
    {
+      if (context == null)
+      {
+         InjectManager manager = InjectManager.create();
+         context = (ConversationContext) manager.getContext(ConversationScoped.class);
+      }
+
       try
       {
          context.destroy();
@@ -86,6 +87,7 @@ public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversati
       finally
       {
          requests.remove();
+         HackFacesContext.getCurrentInstance().release();
       }
    }
 }

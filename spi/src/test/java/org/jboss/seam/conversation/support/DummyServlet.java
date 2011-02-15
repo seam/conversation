@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Dummy servlet.
@@ -38,6 +39,8 @@ public class DummyServlet extends HttpServlet
 {
    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
-      resp.getWriter().write("OK");
+      PrintWriter writer = resp.getWriter();
+      writer.write("OK");
+      writer.flush();
    }
 }

@@ -23,9 +23,11 @@
       <weld.core.version>1.1.0.Final</weld.core.version>
       <openwebbeans.impl.version>1.0.0</openwebbeans.impl.version>
       <candi.impl.version>4.0.14</candi.impl.version>
+      <jsf.version>2.0.2-FCS</jsf.version>
       <!-- testing -->
       <tomcat.version>6.0.26</tomcat.version>
       <jetty.version>6.1.21</jetty.version>
+      <resin.arq.version>1.0.0-SNAPSHOT</resin.arq.version>
    </properties>
 
    <modules>
@@ -88,16 +90,6 @@
          <id>caucho</id>
          <name>Caucho Maven Repository</name>
          <url>http://caucho.com/m2/</url>
-         <layout>default</layout>
-         <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-         </releases>
-      </repository>
-      <repository>
-         <id>x</id>
-         <name>X Maven Repository</name>
-         <url>http://x.y.com</url>
          <layout>default</layout>
          <releases>
             <enabled>true</enabled>
@@ -176,6 +168,12 @@
          <scope>test</scope>
       </dependency>
 
+       <dependency>
+          <groupId>javax.faces</groupId>
+          <artifactId>jsf-api</artifactId>
+          <version>${jsf.version}</version>
+       </dependency>
+
       <dependency>
          <groupId>org.jboss.weld.servlet</groupId>
          <artifactId>weld-servlet-test-base</artifactId>
@@ -194,6 +192,13 @@
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-tomcat-embedded-6</artifactId>
          <version>${arquillian.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-resin4-embedded</artifactId>
+         <version>${resin.arq.version}</version>
          <scope>test</scope>
       </dependency>
 

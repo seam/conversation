@@ -91,9 +91,11 @@ public class SmokeBase
       HttpMethod method = new GetMethod(Deployments.CONTEXT_PATH + "dummy/");
       int response = client.executeMethod(method);
       Assert.assertEquals(200, response);
+      Assert.assertEquals("OK", method.getResponseBodyAsString());
 
-      method = new GetMethod(Deployments.CONTEXT_PATH + "dummy/?cid=123");
+      method = new GetMethod(Deployments.CONTEXT_PATH + "dummy/?cid=1234");
       response = client.executeMethod(method);
       Assert.assertEquals(200, response);
+      Assert.assertEquals("OK", method.getResponseBodyAsString());
    }
 }

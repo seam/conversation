@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arquillian xmlns="http://jboss.com/arquillian"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:resin4="urn:arq:com.caucho.arquillian.container.resin.embedded_4">
+
+   <resin4:container>
+      <resin4:bindHttpPort>8080</resin4:bindHttpPort>
+   </resin4:container>
+
+</arquillian>
