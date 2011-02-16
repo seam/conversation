@@ -27,8 +27,11 @@ import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.servlet.http.HttpServletRequest;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.security.AccessController;
+import java.security.PrivilegedExceptionAction;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -108,8 +111,52 @@ public class SeamConversationContextFactory
       while(iter.hasNext())
       {
          SeamConversationContext scc = iter.next();
-         return scc; // TODO
+         if (match(scc, storeType))
+            return scc;
       }
       throw new IllegalArgumentException("No matching CDI environment available: " + storeType);
+   }
+
+   /**
+    * Match current Seam conversation context instance with store type.
+    *
+    * @param scc current Seam conversation context
+    * @param storeType the store type
+    * @return true if scc can be used together with store type, false otherwise
+    */
+   private static boolean match(SeamConversationContext scc, final Class<?> storeType)
+   {
+      // TODO -- any better way of doing this?
+      try
+      {
+         Class<?> current = scc.getClass();
+         while (current != Object.class)
+         {
+            final Class<?> clazz = current;
+            Method doAssociate = AccessController.doPrivileged(new PrivilegedExceptionAction<Method>()
+            {
+               public Method run() throws Exception
+               {
+                  try
+                  {
+                     // TODo -- impl detail
+                     return clazz.getDeclaredMethod("doAssociate", storeType);
+                  }
+                  catch (NoSuchMethodException nsme)
+                  {
+                     return null;
+                  }
+               }
+            });
+            if (doAssociate != null)
+               return true;
+
+            current = current.getSuperclass();
+         }
+      }
+      catch (Throwable ignored)
+      {
+      }
+      return false;
    }
 }

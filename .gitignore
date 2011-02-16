@@ -4,4 +4,6 @@ target
 *.ipr
 candi/seam-conversation.log
 candi/resin-data/
+resin-data/
+seam-conversation.log
 
