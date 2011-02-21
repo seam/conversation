@@ -33,7 +33,6 @@ import java.lang.reflect.Type;
 import java.security.AccessController;
 import java.security.PrivilegedExceptionAction;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 
@@ -107,10 +106,8 @@ public class SeamConversationContextFactory
    private static <T> SeamConversationContext<T> create(Class<T> storeType)
    {
       ServiceLoader<SeamConversationContext> loader = ServiceLoader.load(SeamConversationContext.class);
-      Iterator<SeamConversationContext> iter = loader.iterator();
-      while(iter.hasNext())
+      for(SeamConversationContext scc : loader)
       {
-         SeamConversationContext scc = iter.next();
          if (match(scc, storeType))
             return scc;
       }
