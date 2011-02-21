@@ -2,6 +2,7 @@
 target
 *.iml
 *.ipr
+*.iws
 candi/seam-conversation.log
 candi/resin-data/
 resin-data/
