@@ -195,12 +195,12 @@
          <scope>test</scope>
       </dependency>
 
-      <dependency>
+      <!-- dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-resin4-embedded</artifactId>
          <version>${resin.arq.version}</version>
          <scope>test</scope>
-      </dependency>
+      </dependency -->
 
        <dependency>
           <groupId>org.apache.tomcat</groupId>
