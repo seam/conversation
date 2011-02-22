@@ -27,6 +27,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.plugins.candi.ManagerObjectFactory;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 /**
@@ -35,6 +36,7 @@ import org.junit.runner.RunWith;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 @RunWith(Arquillian.class)
+@Ignore("Resin4 + Arquillian is not yet properly released")
 public class CanDISmokeTest extends SmokeBase
 {
    @Deployment
