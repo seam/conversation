@@ -32,6 +32,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.security.PrivilegedExceptionAction;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +52,17 @@ public class SeamConversationContextFactory
    private static SeamConversationContext NOOP_INSTANCE = new NoopSeamConversationContext();
 
    private static Map<String, SeamConversationContext> contexts;
+
+   static
+   {
+      disableNoopInstance = AccessController.doPrivileged(new PrivilegedAction<Boolean>()
+      {
+         public Boolean run()
+         {
+            return Boolean.getBoolean("seam.conversation.disable.noop");
+         }
+      });
+   }
 
    /**
     * Produce matching Seam conversation context.
