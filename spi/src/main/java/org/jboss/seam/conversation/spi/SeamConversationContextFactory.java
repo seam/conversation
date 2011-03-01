@@ -22,6 +22,7 @@
 
 package org.jboss.seam.conversation.spi;
 
+import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -35,6 +36,7 @@ import java.security.PrivilegedExceptionAction;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.logging.Logger;
 
 /**
  * Create SeamConversationContext based on underlying CDI implementation.
@@ -43,6 +45,11 @@ import java.util.ServiceLoader;
  */
 public class SeamConversationContextFactory
 {
+   private static Logger log = Logger.getLogger(SeamConversationContextFactory.class.getName());
+
+   private static boolean disableNoopInstance;
+   private static SeamConversationContext NOOP_INSTANCE = new NoopSeamConversationContext();
+
    private static Map<String, SeamConversationContext> contexts;
 
    /**
@@ -111,7 +118,14 @@ public class SeamConversationContextFactory
          if (match(scc, storeType))
             return scc;
       }
-      throw new IllegalArgumentException("No matching CDI environment available: " + storeType);
+
+      if (disableNoopInstance == false)
+      {
+         log.warning("No matching SeamConversationContext for store type " + storeType + ", using NOOP instance!");
+         return NOOP_INSTANCE;
+      }
+      else
+         throw new IllegalArgumentException("No matching CDI environment available: " + storeType);
    }
 
    /**
@@ -155,5 +169,45 @@ public class SeamConversationContextFactory
       {
       }
       return false;
+   }
+
+   /**
+    * Do we allow noop Seam conversation context instance.
+    * If disabled, an exception will be thrown for no match.
+    *
+    * @param disableNoopInstance the noop flag
+    */
+   public static void setDisableNoopInstance(boolean disableNoopInstance)
+   {
+      SeamConversationContextFactory.disableNoopInstance = disableNoopInstance;
+   }
+
+   @Alternative
+   private static class NoopSeamConversationContext implements SeamConversationContext
+   {
+      public SeamConversationContext associate(Object storage)
+      {
+         return this;
+      }
+
+      public SeamConversationContext activate(String conversationId)
+      {
+         return this;
+      }
+
+      public SeamConversationContext invalidate()
+      {
+         return this;
+      }
+
+      public SeamConversationContext deactivate()
+      {
+         return this;
+      }
+
+      public SeamConversationContext dissociate(Object storage)
+      {
+         return this;
+      }
    }
 }
