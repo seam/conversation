@@ -22,6 +22,8 @@
 
 package org.jboss.seam.conversation.api;
 
+import java.util.Hashtable;
+
 import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.CompositeName;
 import javax.naming.Context;
@@ -29,42 +31,33 @@ import javax.naming.InvalidNameException;
 import javax.naming.Name;
 import javax.naming.spi.ObjectFactory;
 
-import java.util.Hashtable;
-
 /**
  * Abstract BeanManager object factory.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public abstract class AbstractManagerObjectFactory implements ObjectFactory
-{
-   private final CompositeName BEAN_MANAGER;
+public abstract class AbstractManagerObjectFactory implements ObjectFactory {
+    private final CompositeName BEAN_MANAGER;
 
-   public AbstractManagerObjectFactory()
-   {
-      try
-      {
-         BEAN_MANAGER = new CompositeName("BeanManager");
-      }
-      catch (InvalidNameException e)
-      {
-         throw new IllegalArgumentException(e);
-      }
-   }
+    public AbstractManagerObjectFactory() {
+        try {
+            BEAN_MANAGER = new CompositeName("BeanManager");
+        } catch (InvalidNameException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
 
-   /**
-    * Provide current BeanManager instance.
-    *
-    * @return the current BeanManager instance
-    */
-   protected abstract BeanManager getBeanManager();
+    /**
+     * Provide current BeanManager instance.
+     *
+     * @return the current BeanManager instance
+     */
+    protected abstract BeanManager getBeanManager();
 
-   public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment) throws Exception
-   {
-      if (name.endsWith(BEAN_MANAGER))
-      {
-         return getBeanManager();
-      }
-      return null;
-   }
+    public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable<?, ?> environment) throws Exception {
+        if (name.endsWith(BEAN_MANAGER)) {
+            return getBeanManager();
+        }
+        return null;
+    }
 }

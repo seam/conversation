@@ -24,19 +24,16 @@ package org.jboss.seam.conversation.plugins.candi;
 
 import javax.enterprise.inject.spi.BeanManager;
 
-import org.jboss.seam.conversation.api.AbstractManagerObjectFactory;
-
 import com.caucho.config.inject.InjectManager;
+import org.jboss.seam.conversation.api.AbstractManagerObjectFactory;
 
 /**
  * CanDI BeanManager ObjectFactory.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class ManagerObjectFactory extends AbstractManagerObjectFactory
-{
-   protected BeanManager getBeanManager()
-   {
-      return InjectManager.create();
-   }
+public class ManagerObjectFactory extends AbstractManagerObjectFactory {
+    protected BeanManager getBeanManager() {
+        return InjectManager.create();
+    }
 }

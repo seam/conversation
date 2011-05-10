@@ -27,7 +27,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.plugins.openwebbeans.ManagerObjectFactory;
 import org.jboss.seam.conversation.support.HackContextLifecycleListener;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-
 import org.junit.runner.RunWith;
 
 /**
@@ -36,14 +35,12 @@ import org.junit.runner.RunWith;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 @RunWith(Arquillian.class)
-public class OWBSmokeTest extends SmokeBase
-{
-   @Deployment
-   public static WebArchive deployment()
-   {
-      return deployment(
-            Deployments.baseDeployment(getWebXml("")),
-            "<Listener className=\"" + HackContextLifecycleListener.class.getName() + "\"/>", ManagerObjectFactory.class.getName()
-            );
-   }
+public class OWBSmokeTest extends SmokeBase {
+    @Deployment
+    public static WebArchive deployment() {
+        return deployment(
+                Deployments.baseDeployment(getWebXml("")),
+                "<Listener className=\"" + HackContextLifecycleListener.class.getName() + "\"/>", ManagerObjectFactory.class.getName()
+        );
+    }
 }

@@ -31,27 +31,25 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
  * @author -- from Weld Servlet --
  * @author Ales Justin
  */
-public class TomcatDeployments
-{
-   public static final String CONTEXT_XML =
-         "<Context>" +
-         "%1s" +
-         "<Manager pathname=\"\" /> <Resource name=\"BeanManager\" auth=\"Container\" type=\"javax.inject.manager.BeanManager\" factory=\"%2s\"/>" +
-         "</Context>";
+public class TomcatDeployments {
+    public static final String CONTEXT_XML =
+            "<Context>" +
+                    "%1s" +
+                    "<Manager pathname=\"\" /> <Resource name=\"BeanManager\" auth=\"Container\" type=\"javax.inject.manager.BeanManager\" factory=\"%2s\"/>" +
+                    "</Context>";
 
-   /**
-    * Add Tomcat specific metadata.
-    *
-    * @param archive the current archive
-    * @param args the args
-    * @return modified archive
-    */
-   public static WebArchive tomcatfy(WebArchive archive, String... args)
-   {
-      if (args == null || args.length == 0)
-         throw new IllegalArgumentException("Null or empty args");
+    /**
+     * Add Tomcat specific metadata.
+     *
+     * @param archive the current archive
+     * @param args    the args
+     * @return modified archive
+     */
+    public static WebArchive tomcatfy(WebArchive archive, String... args) {
+        if (args == null || args.length == 0)
+            throw new IllegalArgumentException("Null or empty args");
 
-      String contextXml = new Formatter().format(CONTEXT_XML, args).toString();
-      return archive.add(new StringAsset(contextXml), "META-INF/context.xml");
-   }
+        String contextXml = new Formatter().format(CONTEXT_XML, args).toString();
+        return archive.add(new StringAsset(contextXml), "META-INF/context.xml");
+    }
 }

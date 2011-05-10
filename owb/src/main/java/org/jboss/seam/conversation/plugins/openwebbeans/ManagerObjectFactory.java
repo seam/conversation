@@ -24,19 +24,16 @@ package org.jboss.seam.conversation.plugins.openwebbeans;
 
 import javax.enterprise.inject.spi.BeanManager;
 
-import org.jboss.seam.conversation.api.AbstractManagerObjectFactory;
-
 import org.apache.webbeans.container.BeanManagerImpl;
+import org.jboss.seam.conversation.api.AbstractManagerObjectFactory;
 
 /**
  * OpenWebBeans jndi object factory.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class ManagerObjectFactory extends AbstractManagerObjectFactory
-{
-   protected BeanManager getBeanManager()
-   {
-      return BeanManagerImpl.getManager();
-   }
+public class ManagerObjectFactory extends AbstractManagerObjectFactory {
+    protected BeanManager getBeanManager() {
+        return BeanManagerImpl.getManager();
+    }
 }

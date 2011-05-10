@@ -35,43 +35,33 @@ import org.jboss.weld.context.http.HttpConversationContext;
  * @author Pete Muir
  * @author Shane Bryzak
  */
-public class WeldHttpSeamConversationContext extends AbstractHttpSeamConversationContext
-{
-   protected HttpConversationContext getHttpConversationContext()
-   {
-      return Container.instance().deploymentManager().instance().select(HttpConversationContext.class).get();
-   }
+public class WeldHttpSeamConversationContext extends AbstractHttpSeamConversationContext {
+    protected HttpConversationContext getHttpConversationContext() {
+        return Container.instance().deploymentManager().instance().select(HttpConversationContext.class).get();
+    }
 
-   protected void doAssociate(HttpServletRequest request)
-   {
-      getHttpConversationContext().associate(request);
-   }
+    protected void doAssociate(HttpServletRequest request) {
+        getHttpConversationContext().associate(request);
+    }
 
-   protected void doActivate(String conversationId)
-   {
-      HttpConversationContext conversationContext = getHttpConversationContext();
-      if (conversationId != null && isEmpty(conversationId) == false)
-      {
-         conversationContext.activate(conversationId);
-      }
-      else
-      {
-         conversationContext.activate(null);
-      }
-   }
+    protected void doActivate(String conversationId) {
+        HttpConversationContext conversationContext = getHttpConversationContext();
+        if (conversationId != null && isEmpty(conversationId) == false) {
+            conversationContext.activate(conversationId);
+        } else {
+            conversationContext.activate(null);
+        }
+    }
 
-   protected void doInvalidate()
-   {
-      getHttpConversationContext().invalidate();
-   }
+    protected void doInvalidate() {
+        getHttpConversationContext().invalidate();
+    }
 
-   protected void doDeactivate()
-   {
-      getHttpConversationContext().deactivate();
-   }
+    protected void doDeactivate() {
+        getHttpConversationContext().deactivate();
+    }
 
-   protected void doDissociate(HttpServletRequest request)
-   {
-      getHttpConversationContext().dissociate(request);
-   }
+    protected void doDissociate(HttpServletRequest request) {
+        getHttpConversationContext().dissociate(request);
+    }
 }

@@ -25,8 +25,8 @@
          http://jboss.org/schema/weld/beans
          http://jboss.org/schema/weld/beans_1_1.xsd">
 
-   <weld:scan>
-      <weld:exclude pattern="org\.jboss\.seam\.conversation\.api\.[a-zA-Z]+"/>
-   </weld:scan>
+    <weld:scan>
+        <weld:exclude pattern="org\.jboss\.seam\.conversation\.api\.[a-zA-Z]+"/>
+    </weld:scan>
 
 </beans>

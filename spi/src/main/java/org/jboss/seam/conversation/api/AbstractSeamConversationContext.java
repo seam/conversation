@@ -30,62 +30,53 @@ import org.jboss.seam.conversation.spi.SeamConversationContext;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public abstract class AbstractSeamConversationContext<T> implements SeamConversationContext<T>
-{
-   protected abstract void doAssociate(T storage);
+public abstract class AbstractSeamConversationContext<T> implements SeamConversationContext<T> {
+    protected abstract void doAssociate(T storage);
 
-   public SeamConversationContext<T> associate(T storage)
-   {
-      doAssociate(storage);
-      return this;
-   }
+    public SeamConversationContext<T> associate(T storage) {
+        doAssociate(storage);
+        return this;
+    }
 
-   protected abstract void doDissociate(T storage);
+    protected abstract void doDissociate(T storage);
 
-   public SeamConversationContext<T> dissociate(T storage)
-   {
-      doDissociate(storage);
-      return this;
-   }
-   protected abstract void doActivate(String conversationId);
+    public SeamConversationContext<T> dissociate(T storage) {
+        doDissociate(storage);
+        return this;
+    }
 
-   public SeamConversationContext<T> activate(String conversationId)
-   {
-      doActivate(conversationId);
-      return this;
-   }
+    protected abstract void doActivate(String conversationId);
 
-   protected abstract void doInvalidate();
+    public SeamConversationContext<T> activate(String conversationId) {
+        doActivate(conversationId);
+        return this;
+    }
 
-   public SeamConversationContext<T> invalidate()
-   {
-      doInvalidate();
-      return this;
-   }
+    protected abstract void doInvalidate();
 
-   protected abstract void doDeactivate();
+    public SeamConversationContext<T> invalidate() {
+        doInvalidate();
+        return this;
+    }
 
-   public SeamConversationContext<T> deactivate()
-   {
-      doDeactivate();
-      return this;
-   }
+    protected abstract void doDeactivate();
 
-   protected static boolean isEmpty(String string)
-   {
-      int len;
-      if (string == null || (len = string.length()) == 0)
-      {
-         return true;
-      }
+    public SeamConversationContext<T> deactivate() {
+        doDeactivate();
+        return this;
+    }
 
-      for (int i = 0; i < len; i++)
-      {
-         if ((Character.isWhitespace(string.charAt(i)) == false))
-         {
-            return false;
-         }
-      }
-      return true;
-   }
+    protected static boolean isEmpty(String string) {
+        int len;
+        if (string == null || (len = string.length()) == 0) {
+            return true;
+        }
+
+        for (int i = 0; i < len; i++) {
+            if ((Character.isWhitespace(string.charAt(i)) == false)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -31,35 +31,29 @@ import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamConversationContext
-{
-   static ThreadLocal<String> cids = new ThreadLocal<String>();
-   static ThreadLocal<String> sessions = new ThreadLocal<String>();
+public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamConversationContext {
+    static ThreadLocal<String> cids = new ThreadLocal<String>();
+    static ThreadLocal<String> sessions = new ThreadLocal<String>();
 
-   protected void doAssociate(HttpServletRequest request)
-   {
-      cids.set(request.getParameter("cid"));
-      sessions.set(request.getSession().getId());
-   }
+    protected void doAssociate(HttpServletRequest request) {
+        cids.set(request.getParameter("cid"));
+        sessions.set(request.getSession().getId());
+    }
 
-   protected void doActivate(String conversationId)
-   {
-      OpenWebBeansSeamConversationManager.doActivate(conversationId);
-   }
+    protected void doActivate(String conversationId) {
+        OpenWebBeansSeamConversationManager.doActivate(conversationId);
+    }
 
-   protected void doInvalidate()
-   {
-      OpenWebBeansSeamConversationManager.doInvalidate();
-   }
+    protected void doInvalidate() {
+        OpenWebBeansSeamConversationManager.doInvalidate();
+    }
 
-   protected void doDeactivate()
-   {
-      OpenWebBeansSeamConversationManager.doDeactivate();
-   }
+    protected void doDeactivate() {
+        OpenWebBeansSeamConversationManager.doDeactivate();
+    }
 
-   protected void doDissociate(HttpServletRequest request)
-   {
-      cids.remove();
-      sessions.remove();
-   }
+    protected void doDissociate(HttpServletRequest request) {
+        cids.remove();
+        sessions.remove();
+    }
 }

@@ -22,6 +22,11 @@
 
 package org.jboss.seam.conversation.test;
 
+import junit.framework.Assert;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.jboss.arquillian.api.Run;
 import org.jboss.arquillian.api.RunModeType;
 import org.jboss.seam.conversation.spi.SeamConversationContext;
@@ -30,12 +35,6 @@ import org.jboss.seam.conversation.support.SetupHttpSCCFilter;
 import org.jboss.shrinkwrap.api.asset.Asset;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-
-import junit.framework.Assert;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.SimpleHttpConnectionManager;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.junit.Test;
 
 /**
@@ -44,58 +43,54 @@ import org.junit.Test;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 @Run(RunModeType.AS_CLIENT)
-public class SmokeBase
-{
-   static String FILTER = 
-         "<filter>" +
-         "<filter-name>conversation</filter-name>" +
-         "<filter-class>" + SetupHttpSCCFilter.class.getName() + "</filter-class>" +
-         "</filter>" +
-         "<filter>" +
-         "<filter-name>test-filter</filter-name>" +
-         "<filter-class>" + RealTestFilter.class.getName() + "</filter-class>" +
-         "</filter>" +
-         "<filter-mapping>" +
-         "<filter-name>conversation</filter-name>" +
-         "<url-pattern>/*</url-pattern>" +
-         "</filter-mapping>" +
-         "<filter-mapping>" +
-         "<filter-name>test-filter</filter-name>" +
-         "<url-pattern>/*</url-pattern>" +
-         "</filter-mapping>";
+public class SmokeBase {
+    static String FILTER =
+            "<filter>" +
+                    "<filter-name>conversation</filter-name>" +
+                    "<filter-class>" + SetupHttpSCCFilter.class.getName() + "</filter-class>" +
+                    "</filter>" +
+                    "<filter>" +
+                    "<filter-name>test-filter</filter-name>" +
+                    "<filter-class>" + RealTestFilter.class.getName() + "</filter-class>" +
+                    "</filter>" +
+                    "<filter-mapping>" +
+                    "<filter-name>conversation</filter-name>" +
+                    "<url-pattern>/*</url-pattern>" +
+                    "</filter-mapping>" +
+                    "<filter-mapping>" +
+                    "<filter-name>test-filter</filter-name>" +
+                    "<url-pattern>/*</url-pattern>" +
+                    "</filter-mapping>";
 
-   protected static Asset getWebXml(String... args)
-   {
-      return new StringAsset(Deployments.extendDefaultWebXml(FILTER, args));
-   }
+    protected static Asset getWebXml(String... args) {
+        return new StringAsset(Deployments.extendDefaultWebXml(FILTER, args));
+    }
 
-   protected static WebArchive deployment(WebArchive archive, String... args)
-   {
-      archive.addPackage(SetupHttpSCCFilter.class.getPackage());
-      archive.addPackage(SeamConversationContext.class.getPackage());
+    protected static WebArchive deployment(WebArchive archive, String... args) {
+        archive.addPackage(SetupHttpSCCFilter.class.getPackage());
+        archive.addPackage(SeamConversationContext.class.getPackage());
 
-      WebArchive webArchive = TomcatDeployments.tomcatfy(archive, args);
-      webArchive.add(new StringAsset("<html/>"), "index.html");
-      System.err.println(webArchive.toString(true));
-      return webArchive;
-   }
+        WebArchive webArchive = TomcatDeployments.tomcatfy(archive, args);
+        webArchive.add(new StringAsset("<html/>"), "index.html");
+        System.err.println(webArchive.toString(true));
+        return webArchive;
+    }
 
-   @Test
-   public void testFactory() throws Exception
-   {
-      Thread.sleep(1000L);
+    @Test
+    public void testFactory() throws Exception {
+        Thread.sleep(1000L);
 
-      SimpleHttpConnectionManager connManager = new SimpleHttpConnectionManager(true);
-      HttpClient client = new HttpClient(connManager);
+        SimpleHttpConnectionManager connManager = new SimpleHttpConnectionManager(true);
+        HttpClient client = new HttpClient(connManager);
 
-      HttpMethod method = new GetMethod(Deployments.CONTEXT_PATH + "dummy/");
-      int response = client.executeMethod(method);
-      Assert.assertEquals(200, response);
-      Assert.assertEquals("OK", method.getResponseBodyAsString());
+        HttpMethod method = new GetMethod(Deployments.CONTEXT_PATH + "dummy/");
+        int response = client.executeMethod(method);
+        Assert.assertEquals(200, response);
+        Assert.assertEquals("OK", method.getResponseBodyAsString());
 
-      method = new GetMethod(Deployments.CONTEXT_PATH + "dummy/?cid=1234");
-      response = client.executeMethod(method);
-      Assert.assertEquals(200, response);
-      Assert.assertEquals("OK", method.getResponseBodyAsString());
-   }
+        method = new GetMethod(Deployments.CONTEXT_PATH + "dummy/?cid=1234");
+        response = client.executeMethod(method);
+        Assert.assertEquals(200, response);
+        Assert.assertEquals("OK", method.getResponseBodyAsString());
+    }
 }

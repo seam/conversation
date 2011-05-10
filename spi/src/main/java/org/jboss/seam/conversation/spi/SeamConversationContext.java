@@ -28,43 +28,42 @@ package org.jboss.seam.conversation.spi;
  * @param <T> exact storage type
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public interface SeamConversationContext<T>
-{
-   /**
-    * Associate storage with conversation context.
-    *
-    * @param storage the current storage
-    * @return the flowing current SeamConversationContext instance
-    */
-   SeamConversationContext<T> associate(T storage);
+public interface SeamConversationContext<T> {
+    /**
+     * Associate storage with conversation context.
+     *
+     * @param storage the current storage
+     * @return the flowing current SeamConversationContext instance
+     */
+    SeamConversationContext<T> associate(T storage);
 
-   /**
-    * Activate conversation with given id.
-    *
-    * @param conversationId the conversation id to activate
-    * @return the flowing current SeamConversationContext instance
-    */
-   SeamConversationContext<T> activate(String conversationId);
+    /**
+     * Activate conversation with given id.
+     *
+     * @param conversationId the conversation id to activate
+     * @return the flowing current SeamConversationContext instance
+     */
+    SeamConversationContext<T> activate(String conversationId);
 
-   /**
-    * Invalidate conversation context.
-    *
-    * @return the flowing current SeamConversationContext instance
-    */
-   SeamConversationContext<T> invalidate();
+    /**
+     * Invalidate conversation context.
+     *
+     * @return the flowing current SeamConversationContext instance
+     */
+    SeamConversationContext<T> invalidate();
 
-   /**
-    * Deactivate conversation context(s).
-    *
-    * @return the flowing current SeamConversationContext instance
-    */
-   SeamConversationContext<T> deactivate();
+    /**
+     * Deactivate conversation context(s).
+     *
+     * @return the flowing current SeamConversationContext instance
+     */
+    SeamConversationContext<T> deactivate();
 
-   /**
-    * Dissociate storage with conversation context.
-    *
-    * @param storage the current storage
-    * @return the flowing current SeamConversationContext instance
-    */
-   SeamConversationContext<T> dissociate(T storage);
+    /**
+     * Dissociate storage with conversation context.
+     *
+     * @param storage the current storage
+     * @return the flowing current SeamConversationContext instance
+     */
+    SeamConversationContext<T> dissociate(T storage);
 }

@@ -22,10 +22,10 @@
 
 package org.jboss.seam.conversation.support;
 
-import javax.servlet.ServletContext;
-
 import java.net.URL;
 import java.util.LinkedList;
+
+import javax.servlet.ServletContext;
 
 import org.apache.AnnotationProcessor;
 import org.apache.catalina.Lifecycle;
@@ -41,63 +41,49 @@ import org.apache.webbeans.web.tomcat.TomcatSecurityListener;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class HackContextLifecycleListener extends ContextLifecycleListener
-{
-   private AnnotationProcessor processor;
+public class HackContextLifecycleListener extends ContextLifecycleListener {
+    private AnnotationProcessor processor;
 
-   public void lifecycleEvent(LifecycleEvent event)
-   {
-      try
-      {
-         if (event.getSource() instanceof StandardContext)
-         {
-            StandardContext context = (StandardContext) event.getSource();
+    public void lifecycleEvent(LifecycleEvent event) {
+        try {
+            if (event.getSource() instanceof StandardContext) {
+                StandardContext context = (StandardContext) event.getSource();
 
-            if (event.getType().equals(Lifecycle.AFTER_START_EVENT))
-            {
-               ServletContext scontext = context.getServletContext();
-               URL url = scontext.getResource("/WEB-INF/beans.xml");
-               if (url != null)
-               {
-                  //Registering ELResolver with JSP container
-                  System.setProperty("org.apache.webbeans.application.jsp", "false");
+                if (event.getType().equals(Lifecycle.AFTER_START_EVENT)) {
+                    ServletContext scontext = context.getServletContext();
+                    URL url = scontext.getResource("/WEB-INF/beans.xml");
+                    if (url != null) {
+                        //Registering ELResolver with JSP container
+                        System.setProperty("org.apache.webbeans.application.jsp", "false");
 
-                  String[] oldListeners = context.findApplicationListeners();
-                  LinkedList<String> listeners = new LinkedList<String>();
-                  listeners.addFirst(WebBeansConfigurationListener.class.getName());
-                  for (String listener : oldListeners)
-                  {
-                     listeners.add(listener);
-                     context.removeApplicationListener(listener);
-                  }
+                        String[] oldListeners = context.findApplicationListeners();
+                        LinkedList<String> listeners = new LinkedList<String>();
+                        listeners.addFirst(WebBeansConfigurationListener.class.getName());
+                        for (String listener : oldListeners) {
+                            listeners.add(listener);
+                            context.removeApplicationListener(listener);
+                        }
 
-                  for (String listener : listeners)
-                  {
-                     context.addApplicationListener(listener);
-                  }
+                        for (String listener : listeners) {
+                            context.addApplicationListener(listener);
+                        }
 
-                  context.addApplicationListener(TomcatSecurityListener.class.getName());
+                        context.addApplicationListener(TomcatSecurityListener.class.getName());
 
-                  processor = context.getAnnotationProcessor();
-                  AnnotationProcessor custom = new TomcatAnnotProcessor(context.getLoader().getClassLoader(), processor);
-                  context.setAnnotationProcessor(custom);
+                        processor = context.getAnnotationProcessor();
+                        AnnotationProcessor custom = new TomcatAnnotProcessor(context.getLoader().getClassLoader(), processor);
+                        context.setAnnotationProcessor(custom);
 
-                  context.getServletContext().setAttribute(AnnotationProcessor.class.getName(), custom);
-               }
+                        context.getServletContext().setAttribute(AnnotationProcessor.class.getName(), custom);
+                    }
+                } else if (event.getType().equals(Lifecycle.AFTER_STOP_EVENT)) {
+                    context.setAnnotationProcessor(processor);
+                }
+            } else {
+                super.lifecycleEvent(event);
             }
-            else if (event.getType().equals(Lifecycle.AFTER_STOP_EVENT))
-            {
-               context.setAnnotationProcessor(processor);
-            }
-         }
-         else
-         {
-            super.lifecycleEvent(event);
-         }
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
-   }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

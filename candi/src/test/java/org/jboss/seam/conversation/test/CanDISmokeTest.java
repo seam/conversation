@@ -26,7 +26,6 @@ import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.plugins.candi.ManagerObjectFactory;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
@@ -37,14 +36,12 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @Ignore("Resin4 + Arquillian is not yet properly released")
-public class CanDISmokeTest extends SmokeBase
-{
-   @Deployment
-   public static WebArchive deployment()
-   {
-      return deployment(
-            Deployments.baseDeployment(getWebXml("")),
-            "", ManagerObjectFactory.class.getName()
-            );
-   }
+public class CanDISmokeTest extends SmokeBase {
+    @Deployment
+    public static WebArchive deployment() {
+        return deployment(
+                Deployments.baseDeployment(getWebXml("")),
+                "", ManagerObjectFactory.class.getName()
+        );
+    }
 }

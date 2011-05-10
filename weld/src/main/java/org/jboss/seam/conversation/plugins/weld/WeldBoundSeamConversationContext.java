@@ -33,43 +33,33 @@ import org.jboss.weld.context.bound.BoundRequest;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  * @author Pete Muir
  */
-public class WeldBoundSeamConversationContext extends AbstractSeamConversationContext<BoundRequest>
-{
-   protected BoundConversationContext getBoundConversationContext()
-   {
-      return Container.instance().deploymentManager().instance().select(BoundConversationContext.class).get();
-   }
+public class WeldBoundSeamConversationContext extends AbstractSeamConversationContext<BoundRequest> {
+    protected BoundConversationContext getBoundConversationContext() {
+        return Container.instance().deploymentManager().instance().select(BoundConversationContext.class).get();
+    }
 
-   protected void doAssociate(BoundRequest request)
-   {
-      getBoundConversationContext().associate(request);
-   }
+    protected void doAssociate(BoundRequest request) {
+        getBoundConversationContext().associate(request);
+    }
 
-   protected void doActivate(String conversationId)
-   {
-      BoundConversationContext conversationContext = getBoundConversationContext();
-      if (conversationId != null && isEmpty(conversationId) == false)
-      {
-         conversationContext.activate(conversationId);
-      }
-      else
-      {
-         conversationContext.activate(null);
-      }
-   }
+    protected void doActivate(String conversationId) {
+        BoundConversationContext conversationContext = getBoundConversationContext();
+        if (conversationId != null && isEmpty(conversationId) == false) {
+            conversationContext.activate(conversationId);
+        } else {
+            conversationContext.activate(null);
+        }
+    }
 
-   protected void doInvalidate()
-   {
-      getBoundConversationContext().invalidate();
-   }
+    protected void doInvalidate() {
+        getBoundConversationContext().invalidate();
+    }
 
-   protected void doDeactivate()
-   {
-      getBoundConversationContext().deactivate();
-   }
+    protected void doDeactivate() {
+        getBoundConversationContext().deactivate();
+    }
 
-   protected void doDissociate(BoundRequest request)
-   {
-      getBoundConversationContext().dissociate(request);
-   }
+    protected void doDissociate(BoundRequest request) {
+        getBoundConversationContext().dissociate(request);
+    }
 }

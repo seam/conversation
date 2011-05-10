@@ -27,7 +27,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.weld.environment.servlet.Listener;
 import org.jboss.weld.resources.ManagerObjectFactory;
-
 import org.junit.runner.RunWith;
 
 /**
@@ -36,14 +35,12 @@ import org.junit.runner.RunWith;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 @RunWith(Arquillian.class)
-public class WeldSmokeTest extends SmokeBase
-{
-   @Deployment
-   public static WebArchive deployment()
-   {
-      return deployment(
-            Deployments.baseDeployment(getWebXml("<listener><listener-class>" + Listener.class.getName() + "</listener-class></listener>")),
-            "", ManagerObjectFactory.class.getName()
-            );
-   }
+public class WeldSmokeTest extends SmokeBase {
+    @Deployment
+    public static WebArchive deployment() {
+        return deployment(
+                Deployments.baseDeployment(getWebXml("<listener><listener-class>" + Listener.class.getName() + "</listener-class></listener>")),
+                "", ManagerObjectFactory.class.getName()
+        );
+    }
 }

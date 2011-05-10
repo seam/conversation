@@ -22,28 +22,25 @@
 
 package org.jboss.seam.conversation.support;
 
+import java.io.Serializable;
+
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
-
-import java.io.Serializable;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 @ConversationScoped
-public class MiddleBean implements Serializable
-{
-   private Conversation conversation;
+public class MiddleBean implements Serializable {
+    private Conversation conversation;
 
-   public Conversation getConversation()
-   {
-      return conversation;
-   }
+    public Conversation getConversation() {
+        return conversation;
+    }
 
-   @Inject
-   public void setConversation(Conversation conversation)
-   {
-      this.conversation = conversation;
-   }
+    @Inject
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
 }

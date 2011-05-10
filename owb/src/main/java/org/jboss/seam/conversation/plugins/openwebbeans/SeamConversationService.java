@@ -29,15 +29,12 @@ import org.apache.webbeans.spi.ConversationService;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-class SeamConversationService implements ConversationService
-{
-   public String getConversationId()
-   {
-      return OpenWebBeansHttpSeamConversationContext.cids.get();
-   }
+class SeamConversationService implements ConversationService {
+    public String getConversationId() {
+        return OpenWebBeansHttpSeamConversationContext.cids.get();
+    }
 
-   public String getConversationSessionId()
-   {
-      return OpenWebBeansHttpSeamConversationContext.sessions.get();
-   }
+    public String getConversationSessionId() {
+        return OpenWebBeansHttpSeamConversationContext.sessions.get();
+    }
 }

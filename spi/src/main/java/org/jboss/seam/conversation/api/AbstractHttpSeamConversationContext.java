@@ -30,6 +30,5 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public abstract class AbstractHttpSeamConversationContext extends AbstractSeamConversationContext<HttpServletRequest>
-{
+public abstract class AbstractHttpSeamConversationContext extends AbstractSeamConversationContext<HttpServletRequest> {
 }

@@ -25,84 +25,70 @@ package org.jboss.seam.conversation.plugins.candi;
 import javax.enterprise.context.ConversationScoped;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
-
 import com.caucho.config.inject.InjectManager;
 import com.caucho.server.webbeans.ConversationContext;
+import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
 
 /**
  * CanDI Http based Seam conversation context.
- *
+ * <p/>
  * Note: depends on JSF
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversationContext
-{
-   private ConversationContext context;
-   private static ThreadLocal<HttpServletRequest> requests = new ThreadLocal<HttpServletRequest>();
+public class CanDIHttpSeamConversationContext extends AbstractHttpSeamConversationContext {
+    private ConversationContext context;
+    private static ThreadLocal<HttpServletRequest> requests = new ThreadLocal<HttpServletRequest>();
 
-   /**
-    * Get context.
-    *
-    * @return the context.
-    */
-   protected ConversationContext getContext()
-   {
-      if (context == null)
-      {
-         synchronized (this)
-         {
-            if (context == null)
-            {
-               InjectManager manager = InjectManager.create();
-               context = (ConversationContext) manager.getContext(ConversationScoped.class);
+    /**
+     * Get context.
+     *
+     * @return the context.
+     */
+    protected ConversationContext getContext() {
+        if (context == null) {
+            synchronized (this) {
+                if (context == null) {
+                    InjectManager manager = InjectManager.create();
+                    context = (ConversationContext) manager.getContext(ConversationScoped.class);
+                }
             }
-         }
-      }
-      return context;
-   }
+        }
+        return context;
+    }
 
-   protected void doAssociate(HttpServletRequest request)
-   {
-      requests.set(request);
-      HackFacesContext.setCurrent(request);
-      // real associate work is done in ConversationContext::createJsfScope
-   }
+    protected void doAssociate(HttpServletRequest request) {
+        requests.set(request);
+        HackFacesContext.setCurrent(request);
+        // real associate work is done in ConversationContext::createJsfScope
+    }
 
-   protected void doActivate(String conversationId)
-   {
-      HttpServletRequest request = requests.get();
-      if (request == null)
-         throw new IllegalArgumentException("Forgot to associate request with conversation context?");
+    protected void doActivate(String conversationId) {
+        HttpServletRequest request = requests.get();
+        if (request == null)
+            throw new IllegalArgumentException("Forgot to associate request with conversation context?");
 
-      HackFacesContext.doActivate(conversationId);
-   }
+        HackFacesContext.doActivate(conversationId);
+    }
 
-   protected void doInvalidate()
-   {
-      // TODO -- any way to invalidate conversations?
-   }
+    protected void doInvalidate() {
+        // TODO -- any way to invalidate conversations?
+    }
 
-   protected void doDeactivate()
-   {
-      HttpServletRequest request = requests.get();
-      if (request == null)
-         throw new IllegalArgumentException("Forgot to associate request with conversation context?");
+    protected void doDeactivate() {
+        HttpServletRequest request = requests.get();
+        if (request == null)
+            throw new IllegalArgumentException("Forgot to associate request with conversation context?");
 
-      HackFacesContext.doDeactivate();
-   }
+        HackFacesContext.doDeactivate();
+    }
 
-   protected void doDissociate(HttpServletRequest request)
-   {
-      try
-      {
-         getContext().destroy();
-      }
-      finally
-      {
-         requests.remove();
-         HackFacesContext.getCurrentInstance().release();
-      }
-   }
+    protected void doDissociate(HttpServletRequest request) {
+        try {
+            getContext().destroy();
+        } finally {
+            requests.remove();
+            HackFacesContext.getCurrentInstance().release();
+        }
+    }
 }

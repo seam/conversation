@@ -22,6 +22,8 @@
 
 package org.jboss.seam.conversation.support;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -31,39 +33,30 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import java.io.IOException;
-
 import org.jboss.seam.conversation.spi.SeamConversationContext;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class SetupHttpSCCFilter implements Filter
-{
-   @SuppressWarnings({"UnusedDeclaration"})
-   @Inject
-   private SeamConversationContext<HttpServletRequest> scc;
+public class SetupHttpSCCFilter implements Filter {
+    @SuppressWarnings({"UnusedDeclaration"})
+    @Inject
+    private SeamConversationContext<HttpServletRequest> scc;
 
-   public void init(FilterConfig config) throws ServletException
-   {
-   }
+    public void init(FilterConfig config) throws ServletException {
+    }
 
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-   {
-      try
-      {
-         String cid = request.getParameter("cid");
-         scc.associate((HttpServletRequest) request).activate(cid);
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        try {
+            String cid = request.getParameter("cid");
+            scc.associate((HttpServletRequest) request).activate(cid);
 
-         chain.doFilter(request, response);
-      }
-      finally
-      {
-         scc.invalidate().deactivate().dissociate((HttpServletRequest) request);
-      }
-   }
+            chain.doFilter(request, response);
+        } finally {
+            scc.invalidate().deactivate().dissociate((HttpServletRequest) request);
+        }
+    }
 
-   public void destroy()
-   {
-   }
+    public void destroy() {
+    }
 }

@@ -22,6 +22,8 @@
 
 package org.jboss.seam.conversation.support;
 
+import java.io.IOException;
+
 import javax.enterprise.context.Conversation;
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -32,57 +34,45 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import java.io.IOException;
-
 import org.junit.Assert;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class RealTestFilter implements Filter
-{
-   private String cId = "1234";
+public class RealTestFilter implements Filter {
+    private String cId = "1234";
 
-   @Inject
-   private MiddleBean bean;
+    @Inject
+    private MiddleBean bean;
 
-   public void init(FilterConfig config) throws ServletException
-   {
-      String t = config.getInitParameter("cid");
-      if (t != null)
-         cId = t;
-   }
+    public void init(FilterConfig config) throws ServletException {
+        String t = config.getInitParameter("cid");
+        if (t != null)
+            cId = t;
+    }
 
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-   {
-      String cid = request.getParameter("cid");
-      System.err.println("Testing ..." + cid + ", sessionId = " + ((HttpServletRequest)request).getSession().getId());
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        String cid = request.getParameter("cid");
+        System.err.println("Testing ..." + cid + ", sessionId = " + ((HttpServletRequest) request).getSession().getId());
 
-      Assert.assertNotNull(bean);
-      Conversation conversation = bean.getConversation();
-      Assert.assertNotNull(conversation);
+        Assert.assertNotNull(bean);
+        Conversation conversation = bean.getConversation();
+        Assert.assertNotNull(conversation);
 
-      if (cid == null)
-      {
-         conversation.begin(cId);
-      }
-      else
-      {
-         Assert.assertEquals(cId, conversation.getId());
-      }
+        if (cid == null) {
+            conversation.begin(cId);
+        } else {
+            Assert.assertEquals(cId, conversation.getId());
+        }
 
-      try
-      {
-         chain.doFilter(request, response);
-      }
-      finally
-      {
-         if (cid != null)
-            conversation.end();
-      }
-   }
+        try {
+            chain.doFilter(request, response);
+        } finally {
+            if (cid != null)
+                conversation.end();
+        }
+    }
 
-   public void destroy()
-   {
-   }
+    public void destroy() {
+    }
 }
