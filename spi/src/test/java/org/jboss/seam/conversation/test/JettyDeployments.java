@@ -42,6 +42,6 @@ public class JettyDeployments {
      * @return modified archive
      */
     public static WebArchive jettyfy(WebArchive archive) {
-        return archive.addWebResource(JETTY_ENV, "jetty-env.xml").addWebResource(JETTY_WEB, "jetty-web.xml");
+        return archive.addAsWebResource(JETTY_ENV, "jetty-env.xml").addAsWebResource(JETTY_WEB, "jetty-web.xml");
     }
 }

@@ -43,6 +43,7 @@
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-tomcat-embedded-6</artifactId>
+	 <version>${arquillian.tomcat.version}</version>
          <scope>test</scope>
       </dependency>
 

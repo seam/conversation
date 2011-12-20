@@ -3,9 +3,10 @@
    <parent>
       <artifactId>seam-parent</artifactId>
       <groupId>org.jboss.seam</groupId>
-      <version>5</version>
+      <version>19</version>
    </parent>
-   <groupId>org.jboss.seam.conversation</groupId>
+
+<groupId>org.jboss.seam.conversation</groupId>
    <artifactId>seam-conversation</artifactId>
    <packaging>pom</packaging>
    <version>3.0.0-SNAPSHOT</version>
@@ -181,16 +182,16 @@
       </dependency>
 
       <dependency>
-         <groupId>org.jboss.arquillian</groupId>
-         <artifactId>arquillian-junit</artifactId>
-         <version>${arquillian.version}</version>
+         <groupId>org.jboss.arquillian.junit</groupId>
+         <artifactId>arquillian-junit-container</artifactId>
+	 <version>${arquillian.version}</version>
          <scope>test</scope>
       </dependency>
 
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-tomcat-embedded-6</artifactId>
-         <version>${arquillian.version}</version>
+	 <version>${arquillian.tomcat.version}</version>
          <scope>test</scope>
       </dependency>
 
