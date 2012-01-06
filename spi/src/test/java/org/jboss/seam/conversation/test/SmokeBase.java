@@ -27,13 +27,16 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.jboss.arquillian.api.Run;
-import org.jboss.arquillian.api.RunModeType;
+import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
 import org.jboss.seam.conversation.spi.SeamConversationContext;
 import org.jboss.seam.conversation.support.RealTestFilter;
 import org.jboss.seam.conversation.support.SetupHttpSCCFilter;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.Asset;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 
@@ -42,7 +45,7 @@ import org.junit.Test;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-@Run(RunModeType.AS_CLIENT)
+@RunAsClient
 public class SmokeBase {
     static String FILTER =
             "<filter>" +
@@ -68,7 +71,12 @@ public class SmokeBase {
 
     protected static WebArchive deployment(WebArchive archive, String... args) {
         archive.addPackage(SetupHttpSCCFilter.class.getPackage());
-        archive.addPackage(SeamConversationContext.class.getPackage());
+
+        archive.addAsLibrary(ShrinkWrap.create(JavaArchive.class, "seam-conversation-spi.jar")
+                .addPackage(SeamConversationContext.class.getPackage())
+                .addPackage(AbstractHttpSeamConversationContext.class.getPackage())
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
+        );
 
         WebArchive webArchive = TomcatDeployments.tomcatfy(archive, args);
         webArchive.add(new StringAsset("<html/>"), "index.html");

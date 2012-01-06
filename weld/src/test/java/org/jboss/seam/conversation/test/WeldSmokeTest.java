@@ -22,8 +22,13 @@
 
 package org.jboss.seam.conversation.test;
 
-import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.seam.conversation.plugins.weld.WeldBoundSeamConversationContext;
+import org.jboss.seam.conversation.plugins.weld.WeldHttpSeamConversationContext;
+import org.jboss.seam.conversation.spi.SeamConversationContext;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.weld.environment.servlet.Listener;
 import org.jboss.weld.resources.ManagerObjectFactory;
@@ -38,9 +43,16 @@ import org.junit.runner.RunWith;
 public class WeldSmokeTest extends SmokeBase {
     @Deployment
     public static WebArchive deployment() {
-        return deployment(
+        final WebArchive war = deployment(
                 Deployments.baseDeployment(getWebXml("<listener><listener-class>" + Listener.class.getName() + "</listener-class></listener>")),
                 "", ManagerObjectFactory.class.getName()
         );
+
+        war.addAsLibrary(ShrinkWrap.create(JavaArchive.class, "seam-conversation-weld.jar")
+                .addPackage(WeldBoundSeamConversationContext.class.getPackage())
+                .addAsServiceProvider(SeamConversationContext.class, WeldBoundSeamConversationContext.class,
+                        WeldHttpSeamConversationContext.class));
+
+        return war;
     }
 }

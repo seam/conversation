@@ -15,6 +15,12 @@
          <artifactId>seam-conversation-spi</artifactId>
       </dependency>
 
+       <dependency>
+           <groupId>org.jboss.spec.javax.servlet</groupId>
+           <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+           <version>1.0.0.Final</version>
+       </dependency>
+
       <dependency>
          <groupId>org.jboss.weld</groupId>
          <artifactId>weld-api</artifactId>
@@ -43,6 +49,7 @@
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-tomcat-embedded-6</artifactId>
+	 <version>${arquillian.tomcat.version}</version>
          <scope>test</scope>
       </dependency>
 

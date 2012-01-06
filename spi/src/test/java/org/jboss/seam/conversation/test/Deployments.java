@@ -54,7 +54,7 @@ public class Deployments {
 
     public static WebArchive baseDeployment(BeansXml beansXml, Asset webXml) {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-                .addWebResource(beansXml, "beans.xml")
+                .addAsWebInfResource(beansXml, "beans.xml")
                 .setWebXML(webXml);
     }
 

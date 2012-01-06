@@ -25,6 +25,7 @@ package org.jboss.seam.conversation.support;
 import java.io.IOException;
 
 import javax.enterprise.context.Conversation;
+import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -42,7 +43,7 @@ import org.junit.Assert;
 public class RealTestFilter implements Filter {
     private String cId = "1234";
 
-    @Inject
+    @Inject @Any
     private MiddleBean bean;
 
     public void init(FilterConfig config) throws ServletException {
