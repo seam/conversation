@@ -24,6 +24,7 @@ package org.jboss.seam.conversation.api;
 
 import java.util.Hashtable;
 
+import javax.enterprise.inject.Typed;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.CompositeName;
 import javax.naming.Context;
@@ -36,6 +37,7 @@ import javax.naming.spi.ObjectFactory;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
+@Typed()
 public abstract class AbstractManagerObjectFactory implements ObjectFactory {
     private final CompositeName BEAN_MANAGER;
 

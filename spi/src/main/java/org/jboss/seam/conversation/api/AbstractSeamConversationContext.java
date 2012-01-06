@@ -23,6 +23,8 @@
 package org.jboss.seam.conversation.api;
 
 
+import javax.enterprise.inject.Typed;
+
 import org.jboss.seam.conversation.spi.SeamConversationContext;
 
 /**
@@ -30,6 +32,7 @@ import org.jboss.seam.conversation.spi.SeamConversationContext;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
+@Typed()
 public abstract class AbstractSeamConversationContext<T> implements SeamConversationContext<T> {
     protected abstract void doAssociate(T storage);
 
