@@ -23,6 +23,7 @@
 package org.jboss.seam.conversation.api;
 
 
+import javax.enterprise.inject.Typed;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -30,5 +31,6 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
+@Typed()
 public abstract class AbstractHttpSeamConversationContext extends AbstractSeamConversationContext<HttpServletRequest> {
 }

@@ -3,12 +3,13 @@
    <parent>
       <artifactId>seam-parent</artifactId>
       <groupId>org.jboss.seam</groupId>
-      <version>5</version>
+      <version>19</version>
    </parent>
-   <groupId>org.jboss.seam.conversation</groupId>
+
+<groupId>org.jboss.seam.conversation</groupId>
    <artifactId>seam-conversation</artifactId>
    <packaging>pom</packaging>
-   <version>3.0.0-SNAPSHOT</version>
+   <version>3.2.0-SNAPSHOT</version>
    <name>Seam Conversation</name>
 
    <prerequisites>
@@ -18,8 +19,8 @@
    <properties>
       <cdi.api.version>1.0-SP3</cdi.api.version>
       <servlet.api.version>2.5</servlet.api.version>
-      <weld.api.version>1.1.Beta2</weld.api.version>
-      <weld.core.version>1.1.0.Final</weld.core.version>
+      <weld.api.version>1.1.Final</weld.api.version>
+      <weld.core.version>1.1.4.Final</weld.core.version>
       <openwebbeans.impl.version>1.0.0</openwebbeans.impl.version>
       <candi.impl.version>4.0.14</candi.impl.version>
       <jsf.version>2.0.2-FCS</jsf.version>
@@ -74,6 +75,7 @@
            <artifactId>maven-surefire-plugin</artifactId>
            <version>2.4.3</version>
            <configuration>
+             <skip>true</skip>
              <redirectTestOutputToFile>true</redirectTestOutputToFile>
              <includes>
                <include>org/jboss/**/*Test.java</include>
@@ -181,16 +183,16 @@
       </dependency>
 
       <dependency>
-         <groupId>org.jboss.arquillian</groupId>
-         <artifactId>arquillian-junit</artifactId>
-         <version>${arquillian.version}</version>
+         <groupId>org.jboss.arquillian.junit</groupId>
+         <artifactId>arquillian-junit-container</artifactId>
+	 <version>${arquillian.version}</version>
          <scope>test</scope>
       </dependency>
 
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-tomcat-embedded-6</artifactId>
-         <version>${arquillian.version}</version>
+	 <version>${arquillian.tomcat.version}</version>
          <scope>test</scope>
       </dependency>
 
