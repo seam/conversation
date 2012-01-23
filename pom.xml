@@ -75,7 +75,6 @@
            <artifactId>maven-surefire-plugin</artifactId>
            <version>2.4.3</version>
            <configuration>
-             <skip>true</skip>
              <redirectTestOutputToFile>true</redirectTestOutputToFile>
              <includes>
                <include>org/jboss/**/*Test.java</include>
