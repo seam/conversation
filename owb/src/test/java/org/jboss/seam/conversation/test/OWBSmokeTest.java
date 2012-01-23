@@ -25,7 +25,11 @@ package org.jboss.seam.conversation.test;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.conversation.plugins.openwebbeans.ManagerObjectFactory;
+import org.jboss.seam.conversation.plugins.openwebbeans.OpenWebBeansHttpSeamConversationContext;
+import org.jboss.seam.conversation.spi.SeamConversationContext;
 import org.jboss.seam.conversation.support.HackContextLifecycleListener;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.runner.RunWith;
 
@@ -41,6 +45,12 @@ public class OWBSmokeTest extends SmokeBase {
         return deployment(
                 Deployments.baseDeployment(getWebXml("")),
                 "<Listener className=\"" + HackContextLifecycleListener.class.getName() + "\"/>", ManagerObjectFactory.class.getName()
+                
+        )
+        
+        .addAsLibrary(ShrinkWrap.create(JavaArchive.class, "seam-conversation-owb.jar")
+            .addPackage(OpenWebBeansHttpSeamConversationContext.class.getPackage())
+            .addAsServiceProvider(SeamConversationContext.class, OpenWebBeansHttpSeamConversationContext.class)
         );
     }
 }

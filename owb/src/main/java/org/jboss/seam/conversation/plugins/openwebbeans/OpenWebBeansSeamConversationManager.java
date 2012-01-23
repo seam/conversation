@@ -26,6 +26,7 @@ import javax.enterprise.context.BusyConversationException;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.NonexistentConversationException;
 
+import org.apache.webbeans.config.WebBeansContext;
 import org.apache.webbeans.context.ContextFactory;
 import org.apache.webbeans.context.ConversationContext;
 import org.apache.webbeans.conversation.ConversationImpl;
@@ -38,11 +39,12 @@ import org.apache.webbeans.conversation.ConversationManager;
  */
 class OpenWebBeansSeamConversationManager {
     static void doActivate(String cid) {
-        ConversationManager conversationManager = ConversationManager.getInstance();
+        ConversationManager conversationManager = WebBeansContext.currentInstance().getConversationManager();
         Conversation conversation = conversationManager.getConversationBeanReference();
+        ContextFactory contextFactory = WebBeansContext.currentInstance().getContextFactory();
 
         if (conversation.isTransient()) {
-            ContextFactory.initConversationContext(null);
+            contextFactory.initConversationContext(null);
             //Not restore, throw exception
             if (cid != null && "".equals(cid) == false) {
                 throw new NonexistentConversationException("Propogated conversation with cid=" + cid + " is not restored. It creates a new transient conversation.");
@@ -51,27 +53,28 @@ class OpenWebBeansSeamConversationManager {
             //Conversation must be used by one thread at a time
             ConversationImpl owbConversation = (ConversationImpl) conversation;
             if (owbConversation.getInUsed().compareAndSet(false, true) == false) {
-                ContextFactory.initConversationContext(null);
+                contextFactory.initConversationContext(null);
                 //Throw Busy exception
                 throw new BusyConversationException("Propogated conversation with cid=" + cid + " is used by other request. It creates a new transient conversation");
             } else {
                 ConversationContext conversationContext = conversationManager.getConversationContext(conversation);
-                ContextFactory.initConversationContext(conversationContext);
+                contextFactory.initConversationContext(conversationContext);
             }
         }
     }
 
     static void doInvalidate() {
-        ConversationManager manager = ConversationManager.getInstance();
-        manager.destroyWithRespectToTimout();
+        ConversationManager conversationManager = WebBeansContext.currentInstance().getConversationManager();
+        conversationManager.destroyWithRespectToTimout();
     }
 
     static void doDeactivate() {
-        ConversationManager conversationManager = ConversationManager.getInstance();
+        ConversationManager conversationManager = WebBeansContext.currentInstance().getConversationManager();
         Conversation conversation = conversationManager.getConversationBeanReference();
+        ContextFactory contextFactory = WebBeansContext.currentInstance().getContextFactory();
 
         if (conversation.isTransient()) {
-            ContextFactory.destroyConversationContext();
+            contextFactory.destroyConversationContext();
         } else {
             //Conversation must be used by one thread at a time
             ConversationImpl owbConversation = (ConversationImpl) conversation;

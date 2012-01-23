@@ -22,6 +22,7 @@
 
 package org.jboss.seam.conversation.plugins.openwebbeans;
 
+import javax.enterprise.inject.Typed;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
@@ -31,6 +32,7 @@ import org.jboss.seam.conversation.api.AbstractHttpSeamConversationContext;
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
+@Typed()
 public class OpenWebBeansHttpSeamConversationContext extends AbstractHttpSeamConversationContext {
     static ThreadLocal<String> cids = new ThreadLocal<String>();
     static ThreadLocal<String> sessions = new ThreadLocal<String>();
