@@ -47,7 +47,7 @@ class OpenWebBeansSeamConversationManager {
             contextFactory.initConversationContext(null);
             //Not restore, throw exception
             if (cid != null && "".equals(cid) == false) {
-                throw new NonexistentConversationException("Propogated conversation with cid=" + cid + " is not restored. It creates a new transient conversation.");
+                throw new NonexistentConversationException("Propagated conversation with cid=" + cid + " is not restored. It creates a new transient conversation.");
             }
         } else {
             //Conversation must be used by one thread at a time
@@ -55,7 +55,7 @@ class OpenWebBeansSeamConversationManager {
             if (owbConversation.getInUsed().compareAndSet(false, true) == false) {
                 contextFactory.initConversationContext(null);
                 //Throw Busy exception
-                throw new BusyConversationException("Propogated conversation with cid=" + cid + " is used by other request. It creates a new transient conversation");
+                throw new BusyConversationException("Propagated conversation with cid=" + cid + " is used by other request. It creates a new transient conversation");
             } else {
                 ConversationContext conversationContext = conversationManager.getConversationContext(conversation);
                 contextFactory.initConversationContext(conversationContext);
@@ -79,7 +79,7 @@ class OpenWebBeansSeamConversationManager {
             //Conversation must be used by one thread at a time
             ConversationImpl owbConversation = (ConversationImpl) conversation;
             owbConversation.updateTimeOut();
-            //Other threads can now access propogated conversation.
+            //Other threads can now access propagated conversation.
             owbConversation.setInUsed(false);
         }
     }
