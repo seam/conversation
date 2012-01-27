@@ -31,14 +31,15 @@ import org.apache.webbeans.spi.plugins.OpenWebBeansPlugin;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class SeamOWBConversationServicePlugin implements OpenWebBeansPlugin {
-    public void startUp() throws Exception {
+
+    public void startUp() {
     }
 
-    public void shutDown() throws Exception {
+    public void shutDown() {
     }
 
-    public void isManagedBean(Class<?> clazz) throws Exception {
-    }
+    public void isManagedBean(Class<?> arg0) {
+    }    
 
     public boolean supportService(Class<?> serviceClass) {
         return ConversationService.class.equals(serviceClass);

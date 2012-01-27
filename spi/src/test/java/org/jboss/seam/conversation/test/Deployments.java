@@ -55,6 +55,9 @@ public class Deployments {
     public static WebArchive baseDeployment(BeansXml beansXml, Asset webXml) {
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addAsWebInfResource(beansXml, "beans.xml")
+                
+                // hack to make Weld tests work on Tomcat
+                .addAsWebInfResource(beansXml, "classes/META-INF/beans.xml")
                 .setWebXML(webXml);
     }
 

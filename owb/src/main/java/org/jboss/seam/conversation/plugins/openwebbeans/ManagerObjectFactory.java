@@ -24,7 +24,7 @@ package org.jboss.seam.conversation.plugins.openwebbeans;
 
 import javax.enterprise.inject.spi.BeanManager;
 
-import org.apache.webbeans.container.BeanManagerImpl;
+import org.apache.webbeans.config.WebBeansContext;
 import org.jboss.seam.conversation.api.AbstractManagerObjectFactory;
 
 /**
@@ -34,6 +34,6 @@ import org.jboss.seam.conversation.api.AbstractManagerObjectFactory;
  */
 public class ManagerObjectFactory extends AbstractManagerObjectFactory {
     protected BeanManager getBeanManager() {
-        return BeanManagerImpl.getManager();
+        return WebBeansContext.currentInstance().getBeanManagerImpl();
     }
 }
